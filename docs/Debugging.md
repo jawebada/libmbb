@@ -6,7 +6,7 @@ libmbb - Debugging Macros
 All these macros can be disabled by defining the macro NDEBUG before including
 `mbb/debug.h`.
 
-Have a look at [the example](examples/debugging.c).
+Have a look at [the example](../examples/debugging.c).
 
 Print a string adding a newline
 -------------------------------
