@@ -20,6 +20,7 @@
 
 #include "mbb/debug.h"
 #include "mbb/types.h"
+#include <unistd.h>
 
 int main(void)
 {
@@ -45,6 +46,14 @@ int main(void)
 	MDBG_PRINT_MEM(data, sizeof(data));
 
 	MDBG_PRINT1("the answer is %d\n", answer);
+
+	/* expected to fail */
+	read(55, NULL, 0);
+	MDBG_PRINT_ERRNO("read");
+
+	MDBG_ASSERT(answer == 42);
+
+	MDBG_NEVER_REACHED();
 
 	return 0;
 }
