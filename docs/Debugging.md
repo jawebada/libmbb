@@ -98,8 +98,8 @@ Print errno
 
 `2015-02-12T13:13:41.000 (examples/debugging.c, 52): read: Bad file descriptor`
 
-Assert an expression
---------------------
+Assertions
+----------
 
 	int answer = 42;
 	MDBG_ASSERT(answer == 41);
@@ -108,8 +108,8 @@ Assert an expression
 	debugging: examples/debugging.c:54: main: Assertion `answer == 41' failed.
 	Aborted
 
-Asser a line of code is never reached
--------------------------------------
+Assert a line of code is never reached
+--------------------------------------
 
 	MDBG_NEVER_REACHED();
 
