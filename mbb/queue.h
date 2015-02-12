@@ -20,6 +20,9 @@
 
 #ifndef MBB_QUEUE_H
 #define MBB_QUEUE_H
+
+#include "mbb/types.h"
+
 /* 
  * Simple type-safe fixed-capacity queues.
  *
