@@ -89,3 +89,30 @@ Example:
 	MDBG_PRINT1("the answer is %d\n", answer);
 
 `2015-02-12T12:44:06.000 (examples/debugging.c, 27): the answer is 42`
+
+Print errno
+-----------
+
+	read(55, NULL, 0);
+	MDBG_PRINT_ERRNO("read");
+
+`2015-02-12T13:13:41.000 (examples/debugging.c, 52): read: Bad file descriptor`
+
+Assert an expression
+--------------------
+
+	int answer = 42;
+	MDBG_ASSERT(answer == 41);
+
+	2015-02-12T13:10:33.000 (examples/debugging.c, 54): assertion failed: answer == 41
+	debugging: examples/debugging.c:54: main: Assertion `answer == 41' failed.
+	Aborted
+
+Asser a line of code is never reached
+-------------------------------------
+
+	MDBG_NEVER_REACHED();
+
+	2015-02-12T13:13:41.000 (examples/debugging.c, 56): assertion failed: !"reached"
+	debugging: examples/debugging.c:56: main: Assertion `!"reached"' failed.
+	Aborted
