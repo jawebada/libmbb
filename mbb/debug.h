@@ -24,6 +24,7 @@
 #ifndef NDEBUG
 
 # include <assert.h>
+# include <errno.h>
 
 # ifndef MDBG_PRINTF
 int mdbg_printf(const char *format, ...);
@@ -109,8 +110,6 @@ int mdbg_timestamp(char *out, int size);
 # define MDBG_PRINT_S(STRVAL) MDBG_PRINT1(#STRVAL ": \"%s\"\n", (STRVAL))
 # define MDBG_PRINT_P(MEMADDR) MDBG_PRINT1(#MEMADDR ": %p\n", (MEMADDR))
 
-# define MDBG_PRINT_ERRNO(MSG) MDBG_PRINT1(MSG ": %s\n", strerror(errno))
-
 # define MDBG_PRINT_MEM(PTR, SIZE) do { \
 	int i; \
 	MDBG_PRINT_PREFIX(); \
@@ -119,6 +118,8 @@ int mdbg_timestamp(char *out, int size);
 		MDBG_PRINTF("%02X ", PTR[i]); \
 	MDBG_PRINTF("\n"); \
 } while (0)
+
+# define MDBG_PRINT_ERRNO(MSG) MDBG_PRINT1(MSG ": %s\n", strerror(errno))
 
 # define MDBG_ASSERT(EXP) do { \
 	if (!(EXP)) { \
@@ -152,8 +153,8 @@ int mdbg_timestamp(char *out, int size);
 # define MDBG_PRINT_S(STRVAL) do {} while(0)
 # define MDBG_PRINT_P(MEMVAL)do {} while(0)
 
-# define MDBG_PRINT_ERRNO(MSG)do {} while(0)
 # define MDBG_PRINT_MEM(PTR, SIZE)do {} while(0)
+# define MDBG_PRINT_ERRNO(MSG)do {} while(0)
 # define MDBG_ASSERT(EXP) do {} while(0)
 # define MDBG_NEVER_REACHED()do {} while(0)
 
