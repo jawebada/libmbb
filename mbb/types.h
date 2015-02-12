@@ -21,6 +21,17 @@
 #ifndef MBB_TYPES_H
 #define MBB_TYPES_H
 
+/* 
+ * This file is included to define the following types:
+ * * fixed-width integer types uint8_t, int8_t, uint16_t, ...
+ * * bool
+ * * size_t
+ *
+ * If your system does not have <stdint.h>, <stdbool.h>, or <stddef.h>, you
+ * should define MBB_SYSTEM_TYPES_HEADER before including mbb/types.h which is
+ * included below and expected to provide the type definitions listed above.
+ */
+
 #ifdef MBB_SYSTEM_TYPES_HEADER
 # include MBB_SYSTEM_TYPES_HEADER
 # else
