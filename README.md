@@ -15,4 +15,4 @@ Features
 * [Hierarchical state machines (HSM)](docs/HSM.md)
 * [Timers](docs/Timer.md)
 * [Fixed-cacpacity queues](docs/Queue.md)
-* [Debugging macros](docs/Debug.md)
+* [Debugging macros](docs/Debugging.md)
