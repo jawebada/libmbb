@@ -104,7 +104,8 @@ Assertions
 	int answer = 42;
 	MDBG_ASSERT(answer == 41);
 
-	2015-02-12T13:10:33.000 (examples/debugging.c, 54): assertion failed: answer == 41
+`2015-02-12T13:10:33.000 (examples/debugging.c, 54): assertion failed: answer == 41`
+
 	debugging: examples/debugging.c:54: main: Assertion `answer == 41' failed.
 	Aborted
 
@@ -113,6 +114,7 @@ Assert a line of code is never reached
 
 	MDBG_NEVER_REACHED();
 
-	2015-02-12T13:13:41.000 (examples/debugging.c, 56): assertion failed: !"reached"
+`2015-02-12T13:13:41.000 (examples/debugging.c, 56): assertion failed: !"reached"`
+
 	debugging: examples/debugging.c:56: main: Assertion `!"reached"' failed.
 	Aborted
