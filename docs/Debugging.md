@@ -74,7 +74,7 @@ Print a memory region
 Generic printing macros
 -----------------------
 
-There are generic `print`-like macros depending on the number of arguments.
+There are generic `printf`-like macros depending on the number of arguments.
 This is because only few preprocessors feature support for variadic macros.
 
 	MDBG_PRINT0(FORMAT)
