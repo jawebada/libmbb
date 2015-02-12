@@ -86,6 +86,6 @@ This is because only few preprocessors feature support for variadic macros.
 Example:
 
 	int answer = 42;
-	MDBG_PRINT1("the answer is %d\n");
+	MDBG_PRINT1("the answer is %d\n", answer);
 
 `2015-02-12T12:44:06.000 (examples/debugging.c, 27): the answer is 42`
