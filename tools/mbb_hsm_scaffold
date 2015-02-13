@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+def add_hsm_scaffolding(file)
+	states = []
+	File.readlines(file).each do |line|
+		if line =~ /^MHSM_DEFINE_STATE\(([a-zA-Z0-9_]+),[^)]*\);.*/
+			states.push($1)
+		end
+	end
+
+	open(file, 'a') do |f|
+		for state in states do
+			f.puts <<EOL
+mhsm_state_t *#{state}_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
+{
+	switch (event.id) {
+		case MHSM_EVENT_ENTRY:
+			break;
+	}
+
+	return &#{state};
+}
+
+EOL
+		end
+	end
+
+end
+
+ARGV.each do |file|
+	if not File.exist?(file)
+		puts "file '#{file}' not found"
+		next
+	end
+
+	puts "processing #{file}"
+	add_hsm_scaffolding(file)
+end
