@@ -64,11 +64,11 @@ mhsm_state_t *mono_off_fun(mhsm_hsm_t* hsm, mhsm_event_t event)
 		case MHSM_EVENT_ENTRY:
 			MDBG_PRINT1("%d off\n", state->id);
 			break;
+		case MONO_EVENT_TRIGGER:
+			return &mono_on;
 		case MHSM_EVENT_DO:
 			printf("OFF");
 			break;
-		case MONO_EVENT_TRIGGER:
-			return &mono_on;
 	}
 
 	return &mono_off;
@@ -83,14 +83,14 @@ mhsm_state_t *mono_on_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
 			MDBG_PRINT1("%d on\n", state->id);
 			state->counter++;
 			/* fall-through */
-		case MHSM_EVENT_DO:
-			printf("ON ");
-			break;
 		case MONO_EVENT_TRIGGER:
 			mhsm_start_timer(hsm, MONO_EVENT_TIMEOUT, MONO_TIMEOUT);
 			break;
 		case MONO_EVENT_TIMEOUT:
 			return &mono_off;
+		case MHSM_EVENT_DO:
+			printf("ON ");
+			break;
 	}
 
 	return &mono_on;
