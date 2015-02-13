@@ -115,7 +115,7 @@ Events
 		int32_t arg;
 	} mhsm_event_t;
 
-`mhsm_event_t` represents an Event which is identified by its `uint32_t`id and
+`mhsm_event_t` represents an Event which is identified by its `uint32_t` id and
 features an optional `int32_t` argument. 
 
 There are five pre-defined event ids:
