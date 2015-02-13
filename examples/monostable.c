@@ -98,8 +98,8 @@ mhsm_state_t *mono_on_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
 	return &mono_on;
 }
 
-#include "periodic.incl"
-#include "keyboard.incl"
+#include "periodic.inc"
+#include "keyboard.inc"
 
 int process(mhsm_hsm_t *switches, void *state)
 {
