@@ -40,7 +40,7 @@ int mtmr_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event)
 		timer->value = 0;
 	}
 
-	hsm->start_timer_callback = mtmr_start_timer;
+	mhsm_set_timer_callback(hsm, mtmr_start_timer);
 
 	return 0;
 }

@@ -62,6 +62,7 @@ void *mhsm_context(mhsm_hsm_t *hsm);
 mhsm_state_t *mhsm_current_state(mhsm_hsm_t *hsm);
 bool mhsm_is_ancestor(mhsm_state_t *ancestor, mhsm_state_t *target);
 bool mhsm_is_in(mhsm_hsm_t *hsm, mhsm_state_t *state);
+void mhsm_set_timer_callback(mhsm_hsm_t *hsm, int (*callback)(mhsm_hsm_t*, uint32_t, uint32_t));
 int mhsm_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
 
 #ifndef MHSM_EVENT_QUEUE_LENGTH

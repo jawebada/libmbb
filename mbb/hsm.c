@@ -307,6 +307,11 @@ bool mhsm_is_in(mhsm_hsm_t *hsm, mhsm_state_t *state)
 	return mhsm_current_state(hsm) == state || mhsm_is_ancestor(state, mhsm_current_state(hsm));
 }
 
+void mhsm_set_timer_callback(mhsm_hsm_t *hsm, int (*callback)(mhsm_hsm_t*, uint32_t, uint32_t))
+{
+	hsm->start_timer_callback = callback;
+}
+
 int mhsm_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs)
 {
 	if (hsm->start_timer_callback == NULL) {
