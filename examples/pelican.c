@@ -21,9 +21,6 @@
 /*
  * PElican LIght CONtrolled Crossing Example
  * http://www.state-machine.com/resources/AN_PELICAN.pdf
- *
- * Press space to trigger PEDS_WAITING event.
- * Press 'o' to trigger OFF/ON events.
  */
 
 #include "mbb/hsm.h"
@@ -54,6 +51,7 @@ enum {
 };
 
 enum {
+	/* timeout events must be defined first */
 	PELICAN_EVENT_TIMEOUT_CARS_GREEN_MIN = MHSM_EVENT_CUSTOM,
 	PELICAN_EVENT_TIMEOUT_CARS_YELLOW,
 	PELICAN_EVENT_TIMEOUT_PEDS_WALK,
@@ -77,6 +75,13 @@ MHSM_DEFINE_STATE(peds_flash, &peds_enabled);
 MHSM_DEFINE_STATE(offline, NULL);
 
 typedef struct {
+	/* 
+	 * mtmr functions assume that mhsm_context(hsm) points to an array of
+	 * mtmr_t. So this array must be the first component of the state
+	 * structure. 
+	 * If the timeout events are defined first (see above)
+	 * MTMR_NROF_TIMERS(last_timer_event) gives the number of timers.
+	 */
 	mtmr_t timers[MTMR_NROF_TIMERS(PELICAN_EVENT_TIMEOUT_OFF_FLASH)];
 	int cars_light_state;
 	int peds_light_state;
@@ -323,7 +328,6 @@ static int process(mhsm_hsm_t *pelican, void *state)
 				mhsm_dispatch_event(pelican, PELICAN_EVENT_PEDS_WAITING);
 				break;
 			case 'o':
-				/* ON is ignored in operational, OFF is ignored in offline. */
 				mhsm_dispatch_event(pelican, mhsm_is_in(pelican, &operational) ? PELICAN_EVENT_OFF : PELICAN_EVENT_ON);
 				break;
 			case 'q':
