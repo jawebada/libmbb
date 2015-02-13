@@ -60,8 +60,8 @@ int mtmr_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32_t p
 		if (timer->active) {
 			timer->value += passed_msecs;
 			if (timer->value >= timer->period) {
-				mhsm_dispatch_event(hsm, MHSM_EVENT_CUSTOM + i);
 				timer->active = 0;
+				mhsm_dispatch_event(hsm, MHSM_EVENT_CUSTOM + i);
 			}
 		}
 	}
