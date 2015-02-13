@@ -84,6 +84,12 @@ Example
 		return 0;
 	}
 
+* [monostable](../examples/monostable.c) is another simple example implementing
+monostable multivibrators (as in staircase lightings).
+* [pelican](../examples/pelican.c) is an implementation of 
+[Miro Samek's](http://www.state-machine.com/)
+[PEdestrian LIght CONtrolled (PELICAN) Crossing Example](http://www.state-machine.com/resources/AN_PELICAN.pdf).
+
 States
 ------
 
