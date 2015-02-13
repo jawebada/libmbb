@@ -1,9 +1,11 @@
 libmbb - Debugging Macros
 =========================
 
-*libmbb* features a set of debugging macros. 
+*libmbb* features a set of debugging macros defined in `mbb/debug.h`.
 
-All these macros can be disabled by defining the macro NDEBUG before including
+	#include "mbb/debug.h"
+
+All debugging macros can be disabled by defining the macro NDEBUG before including
 `mbb/debug.h`.
 
 Have a look at [the example](../examples/debugging.c).
