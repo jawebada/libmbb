@@ -299,9 +299,9 @@ mhsm_state_t *offline_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
 
 	switch (event.id) {
 		case MHSM_EVENT_ENTRY:
-			mhsm_start_timer(hsm, PELICAN_EVENT_TIMEOUT_OFF_FLASH, PELICAN_TIMEOUT_OFF_FLASH);
 			set_cars_light(state, PELICAN_CARS_RED);
 			set_peds_light(state, PELICAN_PEDS_DONT_WALK);
+			mhsm_start_timer(hsm, PELICAN_EVENT_TIMEOUT_OFF_FLASH, PELICAN_TIMEOUT_OFF_FLASH);
 			break;
 		case PELICAN_EVENT_TIMEOUT_OFF_FLASH:
 			set_cars_light(state, state->cars_light_state == PELICAN_CARS_RED ? PELICAN_CARS_BLANK : PELICAN_CARS_RED);
