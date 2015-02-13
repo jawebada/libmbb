@@ -66,7 +66,7 @@ Returns true if the queue is empty, false otherwise.
 	MQUE_ENQUEUE(Q, ELEMENT)
 
 Enqueue an element. `ELEMENT` is assigned to the enqueued element. Always check
-whethere the queue is full before calling `MQUE_ENQUEUE`. It will do nothing if
+whether the queue is full before calling `MQUE_ENQUEUE`. It will do nothing if
 the queue is full.
 
 	MQUE_HEAD(Q)
