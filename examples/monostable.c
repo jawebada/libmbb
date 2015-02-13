@@ -18,9 +18,9 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "mbb/debug.h"
 #include "mbb/hsm.h"
 #include "mbb/timer.h"
+#include "mbb/debug.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -28,16 +28,18 @@
 #define MONO_TIMEOUT		(2 * MTMR_ONE_SEC)
 #define MONO_PERIOD		(100 * MTMR_ONE_MSEC)
 
-typedef struct {
-	mtmr_t timers[1];
-	int id;
-	int counter;
-} mono_state_t;
-
 enum {
+	/* timeout events first */
 	MONO_EVENT_TIMEOUT = MHSM_EVENT_CUSTOM,
 	MONO_EVENT_TRIGGER
 };
+
+typedef struct {
+	/* the state structure must start with an array of mtmr_t */
+	mtmr_t timers[MTMR_NROF_TIMERS(MONO_EVENT_TIMEOUT)];
+	int id;
+	int counter;
+} mono_state_t;
 
 MHSM_DEFINE_STATE(mono_top, NULL);
 MHSM_DEFINE_STATE(mono_off, &mono_top);
