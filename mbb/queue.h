@@ -55,12 +55,12 @@
  * event: 2
  */
 
-#define MQUE_DEFINE_STRUCT(TYPE, LENGTH) \
+#define MQUE_DEFINE_STRUCT(TYPE, CAPACITY) \
 struct { \
 	int first; \
 	int last; \
 	size_t count; \
-	TYPE data[LENGTH]; \
+	TYPE data[CAPACITY]; \
 }
 
 #define MQUE_CAPACITY(Q) (sizeof((Q)->data) / sizeof((Q)->data[0]))
