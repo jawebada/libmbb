@@ -162,8 +162,6 @@ mhsm_state_t *cars_enabled_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
 	pelican_state_t *state = (pelican_state_t*) mhsm_context(hsm);
 
 	switch (event.id) {
-		case MHSM_EVENT_ENTRY:
-			break;
 		case MHSM_EVENT_INITIAL:
 			return &cars_green;
 		case MHSM_EVENT_EXIT:
