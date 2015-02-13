@@ -1,5 +1,5 @@
-libmbb - Hierarchical State Machines
-====================================
+libmbb - Fixed-capacity Queues
+==============================
 
 *libmbb* features a simple set of macros to implement type-safe fixed-capacity
 queues.
