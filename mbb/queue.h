@@ -43,10 +43,8 @@
  *	MQUE_ENQUEUE(&event_queue, 2);
  *
  * 	while (MQUE_LENGTH(&event_queue)) {
- * 		int event;
- * 		event = MQUE_HEAD(&event_queue);
+ *		printf("event: %d\n", MQUE_HEAD(&event_queue));
  * 		MQUE_DEQUEUE(&event_queue);
- *		printf("event: %d\n", event);
  *	}
  * }
  *
