@@ -12,7 +12,6 @@ for the development of applications on embedded platforms.
 Features
 --------
 
-* [Hierarchical state machines](docs/HSM.md)
-* [Timers](docs/Timer.md)
+* [Hierarchical state machines](docs/HSM.md), including [Timers](docs/Timer.md)
 * [Fixed-cacpacity queues](docs/Queue.md)
 * [Debugging macros](docs/Debugging.md)
