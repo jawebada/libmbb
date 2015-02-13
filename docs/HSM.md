@@ -14,6 +14,8 @@ Synopsis
 
 * Define custom events.
 * Define the state hierarchy of your HSM.
+* Optionally, use the [`mbb_hsm_scaffold` tool](../tools/mbb_hsm_scaffold) to
+  generate stubs of the event processing functions.
 * Define the event processing functions.
 * Create as many instances of your HSM as you need along with their contexts.
 * Initialise your HSM instances and their contexts.
@@ -96,7 +98,7 @@ HSMs
 	typedef struct mhsm_hsm_s mhsm_hsm_t;
 
 `mhsm_hsm_t` is an anonymous structure representing an HSM. It stores the
-pointer the the HSM's current state and a pointer the HSM's context.
+pointer of the HSM's current state and a pointer the HSM's context.
 
 Events
 ------
@@ -144,7 +146,12 @@ Functions and Macros
 	void mhsm_set_timer_callback(int (*callback)(mhsm_hsm_t*, uint32_t, uint32_t));
 	int mhsm_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
 
-Non-blocking versus Event-driven processing
+Non-blocking versus event-driven processing
 -------------------------------------------
+
+TBD
+
+Timers
+------
 
 TBD
