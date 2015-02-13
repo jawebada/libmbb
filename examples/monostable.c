@@ -22,10 +22,6 @@
 #include "mbb/hsm.h"
 #include "mbb/timer.h"
 #include <stdio.h>
-#include <termios.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include <stdlib.h>
 
 #define MONO_NROF_SWITCHES	5
@@ -100,36 +96,34 @@ mhsm_state_t *mono_on_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
 	return &mono_on;
 }
 
-static void nonblock(int state)
+#include "periodic.incl"
+#include "keyboard.incl"
+
+int process(mhsm_hsm_t *switches, void *state)
 {
-	struct termios ttystate;
+	int i;
 
-	tcgetattr(STDIN_FILENO, &ttystate);
+	if (kbhit()) {
+		char c = fgetc(stdin);
 
-	if (state) {
-		ttystate.c_lflag &= ~ICANON;
-		ttystate.c_cc[VMIN] = 1;
-	} else {
-		ttystate.c_lflag |= ICANON;
+		MDBG_PRINT_C(c);
+
+		if (c >= '1' && c < ('1' + MONO_NROF_SWITCHES)) 
+			mhsm_dispatch_event(switches + (c - '1'), MONO_EVENT_TRIGGER);
+
+		if (c == 'q') return -1;
 	}
 
-	tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
+	printf("\r");
 
-}
+	for (i = 0; i < MONO_NROF_SWITCHES; i++) {
+		mtmr_increment_timers(switches + i, MONO_EVENT_TIMEOUT, MONO_PERIOD);
+		mhsm_dispatch_event(switches + i, MHSM_EVENT_DO);
+	}
 
-static int kbhit()
-{
-	struct timeval tv;
-	fd_set fds;
+	fflush(stdout);
 
-	tv.tv_sec = 0;
-	tv.tv_usec = 0;
-
-	FD_ZERO(&fds);
-	FD_SET(STDIN_FILENO, &fds); 
-
-	select(STDIN_FILENO+1, &fds, NULL, NULL, &tv);
-	return FD_ISSET(STDIN_FILENO, &fds);
+	return 0;
 }
 
 int main(void)
@@ -151,35 +145,13 @@ int main(void)
 		mhsm_dispatch_event(switches + i, MHSM_EVENT_INITIAL);
 	}
 
+	printf("press '1' to '%c' to enable lights\n", '1' + MONO_NROF_SWITCHES - 1);
+
 	nonblock(1);
-
-	while (1) {
-		usleep(MONO_PERIOD * 1000);
-
-		if (kbhit()) {
-			char c;
-
-			c = fgetc(stdin);
-
-			if (c >= '1' && c < ('1' + MONO_NROF_SWITCHES)) 
-				mhsm_dispatch_event(switches + (c - '1'), MONO_EVENT_TRIGGER);
-
-			if (c == 'q') break;
-		}
-
-		printf("\r");
-
-		for (i = 0; i < MONO_NROF_SWITCHES; i++) {
-			mtmr_increment_timers(switches + i, MONO_EVENT_TIMEOUT, MONO_PERIOD);
-			mhsm_dispatch_event(switches + i, MHSM_EVENT_DO);
-		}
-
-		fflush(stdout);
-	}
+	periodic(MONO_PERIOD, process, switches, switch_states);
+	nonblock(0);
 
 	printf("\nquitting\n");
-
-	nonblock(0);
 
 	return 0;
 }
