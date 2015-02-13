@@ -74,6 +74,8 @@ int mtmr_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs)
 	mtmr_t *timers = (mtmr_t*) mhsm_context(hsm);
 	uint32_t idx = event_id - MHSM_EVENT_CUSTOM;
 
+	MDBG_PRINT2("activating timer %d with period %d\n", idx, period_msecs);
+
 	timers[idx].period = period_msecs;
 	timers[idx].value = 0;
 	timers[idx].active = 1;
