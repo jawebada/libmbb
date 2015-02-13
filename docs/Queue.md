@@ -63,7 +63,7 @@ Returns true if the queue is full, false otherwise.
 
 Returns true if the queue is empty, false otherwise.
 
-	MQUE_ENQUEUE(Q, ELEMENT)
+	MQUE_ENQUEUE(Q, ELEMENT);
 
 Enqueue an element. `ELEMENT` is assigned to the enqueued element. Always check
 whether the queue is full before calling `MQUE_ENQUEUE`. It will do nothing if
@@ -73,7 +73,7 @@ the queue is full.
 
 Returns the queue's head, which is of type `TYPE`.
 
-	MQUE_DEQUEUE(Q)
+	MQUE_DEQUEUE(Q);
 
 Dequeue the queue's head. `MQUE_DEQUEUE` will do nothing if the queue is empty.
 
