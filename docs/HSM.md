@@ -95,7 +95,7 @@ States
 
 	typedef struct mhsm_state_s mhsm_state_t;
 
-`mhsm_hsm_t` is an anonymous structure representing an HSM state. It is
+`mhsm_state_t` is an anonymous structure representing an HSM state. It is
 basically a pointer to an event processing function along with a pointer to its
 superstate.
 
