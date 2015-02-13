@@ -67,7 +67,7 @@ struct { \
 
 #define MQUE_CAPACITY(Q) (sizeof((Q)->data) / sizeof((Q)->data[0]))
 
-#define MQUE_INITIALIZER { 0, -1, 0 }
+#define MQUE_INITIALISER { 0, -1, 0 }
 
 #define MQUE_INITIALISE(Q) do { \
 	(Q)->first = 0; \
