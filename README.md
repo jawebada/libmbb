@@ -6,8 +6,8 @@ libmbb - Embedded Building Bricks
 Synopsis
 --------
 
-*libmbb* is a software library written in ANSI C (C90) which assembles tools
-for the development of applications on embedded platforms.
+*libmbb* is a C library assembling tools for the application development on
+embedded platforms.
 
 Features
 --------
