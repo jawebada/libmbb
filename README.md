@@ -25,4 +25,4 @@ build the library (`mbb/libmbb.a`) along with the example programs.
 License
 -------
 
-*libmbb* is [LICENSE.txt](MIT licensed).
+*libmbb* is [MIT licensed](LICENSE.txt).
