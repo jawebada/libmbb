@@ -15,3 +15,14 @@ Features
 * [Hierarchical state machines](docs/HSM.md)
 * [Fixed-cacpacity queues](docs/Queue.md)
 * [Debugging macros](docs/Debugging.md)
+
+Building
+--------
+
+*libmbb* uses [scons](http://www.scons.org) for Building. Calling `scons` will
+build the library (`mbb/libmbb.a`) along with the example programs.
+
+License
+-------
+
+*libmbb* is [LICENSE.txt](MIT licensed).
