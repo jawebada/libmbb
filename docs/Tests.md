@@ -28,7 +28,7 @@ A test case looks like this
 The test case function must return a string and its name must begin with
 `test_`.
 
-Have a look at *libmbb*'s own [tests](tests) as an example.
+Have a look at *libmbb*'s own [tests](../tests) as an example.
 
 Compiling unit tests
 --------------------
