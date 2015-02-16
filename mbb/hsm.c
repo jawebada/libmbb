@@ -207,16 +207,8 @@ static mhsm_state_t *_dispatch_event(mhsm_hsm_t *hsm, mhsm_state_t *state, mhsm_
 			target = result;
 	}
 
-	/* check whether the event was deferred */
-	if (target == NULL) {
-		MDBG_PRINT2("event %d was defered by %s\n", event.id, state->name);
-
-		/* (re-)enqueue event */
-		if (_defer_event_arg(hsm, event.id, event.arg) != 0)
-			MDBG_PRINT_LN("(re-)enqueing defered event failed");
-
-		return state;
-	}
+	/* return if the event was deferred */
+	if (target == NULL) return NULL;
 
 	if (target != state) 
 		return _transition(hsm, state, target);
@@ -241,8 +233,9 @@ void mhsm_dispatch_event(mhsm_hsm_t *hsm, uint32_t id)
 void mhsm_dispatch_event_arg(mhsm_hsm_t *hsm, uint32_t id, int32_t arg)
 {	
 	mhsm_event_t event;
-	int i;
+	mhsm_state_t *new_state;
 	int nevents;
+	int i;
 
 	MDBG_ASSERT(hsm->current_state != NULL);
 
@@ -256,8 +249,18 @@ void mhsm_dispatch_event_arg(mhsm_hsm_t *hsm, uint32_t id, int32_t arg)
 	event.id = id;
 	event.arg = arg;
 
-	hsm->current_state = _dispatch_event(hsm, hsm->current_state, event);
-	MDBG_ASSERT(hsm->current_state != NULL);
+	new_state = _dispatch_event(hsm, hsm->current_state, event);
+	if (new_state == NULL) {
+		MDBG_PRINT2("event %d was defered by %s\n", event.id, hsm->current_state->name);
+
+		/* (re-)enqueue event */
+		if (_defer_event_arg(hsm, event.id, event.arg) != 0)
+			MDBG_PRINT_LN("(re-)enqueing defered event failed");
+
+		return;
+	}
+
+	hsm->current_state = new_state;
 
 	nevents = MQUE_LENGTH(&hsm->deferred_events);
 	for (i = 0; i < nevents; i++) {
