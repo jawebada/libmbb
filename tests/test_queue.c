@@ -24,6 +24,8 @@ char *test_enqueue_dequeue()
 
 		head = MQUE_HEAD(&queue);
 		MQUE_DEQUEUE(&queue);;
+
+		MUNT_ASSERT(head == i);
 	}
 
 	MUNT_ASSERT(MQUE_IS_EMPTY(&queue));
