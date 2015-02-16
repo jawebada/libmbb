@@ -17,7 +17,7 @@ ARGV.each do |file|
 
 	open(file, 'a') do |f|
 		for state in states do
-			f.puts <<EOL
+			f.puts <<EOC
 mhsm_state_t *#{state}_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
 {
 	switch (event.id) {
@@ -28,7 +28,7 @@ mhsm_state_t *#{state}_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
 	return &#{state};
 }
 
-EOL
+EOC
 		end
 	end
 end
