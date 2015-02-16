@@ -21,7 +21,9 @@ Building
 --------
 
 *libmbb* uses [scons](http://www.scons.org) for Building. Calling `scons` will
-build the library (`mbb/libmbb.a`) along with the example programs.
+build the library (`mbb/libmbb.a`) along with the example programs and tests.
+
+Call `scons test` to run all unit tests.
 
 License
 -------
