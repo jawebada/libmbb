@@ -1,0 +1,63 @@
+#!/usr/bin/env ruby
+
+if ARGV.empty?
+	$stderr.puts "usage: #{File.basename($0)} test_suite.c..."
+end
+
+ARGV.each do |file|
+	test_suite = File.basename(file).gsub('.c', '')
+	testh_included = false
+	tests = []
+	content = ""
+	File.readlines(file).each do |line|
+		if line =~ /^#include "mbb\/test\.h"/
+			testh_included = true
+		end
+		if line =~ /char \*(test_[^(]+)\(/
+			tests.push($1)
+		end
+		content += line
+	end
+	if not testh_included
+		$stderr.puts "#{file} does not include \"mbb/test.h\", skipping..."
+		next
+	end
+
+	puts <<EOC
+#{content}
+
+void textcolor(int attr, int fg, int bg)
+{	char command[13];
+
+	/* Command is the control command to the terminal */
+	sprintf(command, "%c[%d;%d;%dm", 0x1B, attr, fg + 30, bg + 40);
+	fprintf(stderr, "%s", command);
+}
+
+char *munt_all_tests()
+{
+	#{tests.map{|t| "MUNT_RUN_TEST(#{t});"}.join("\n")}
+	
+	return 0;
+}
+
+int main(void)
+{
+	char *result; 
+
+	munt_tests_run = 0;
+
+	fprintf(stderr, "\\nTest suite '#{test_suite}':\\n\\n");
+
+	result = munt_all_tests();
+
+	if (result != 0) {
+		MUNT_COLOR(fprintf(stderr, "Test suite '#{test_suite}' FAILED (%d tests run)\\n", munt_tests_run));
+	} else {
+		fprintf(stderr, "Test suite '#{test_suite}' passed (%d %s run)\\n", munt_tests_run, munt_tests_run > 1 ? "tests" : "test");
+	}
+
+	return result != 0;
+}
+EOC
+end
