@@ -58,6 +58,6 @@ int main(void)
 		fprintf(stderr, "Test suite '#{test_suite}' passed (%d %s run)\\n", munt_tests_run, munt_tests_run > 1 ? "tests" : "test");
 	}
 
-	return result != 0;
+	exit(result == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
 }
 EOC

@@ -2,6 +2,7 @@
 #define MBB_TEST_H
 
 #include <stdio.h>
+#include <stdlib.h>
 
 #if __linux
 /*
