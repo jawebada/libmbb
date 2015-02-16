@@ -14,8 +14,8 @@ Synopsis
 
 * Define custom events.
 * Define the state hierarchy of your HSM.
-* Optionally, use [`mbb_hsm_scaffold`](../tools/mbb_hsm_scaffold) to generate
-  stubs of the event processing functions.
+* Optionally, use [`mhsm_scaffold`](../tools/mhsm_scaffold) to generate stubs
+  of the event processing functions.
 * Define the event processing functions.
 * Create as many instances of your HSM as you need along with their contexts.
 * Initialise your HSM instances and their contexts.
