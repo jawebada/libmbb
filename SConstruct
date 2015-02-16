@@ -12,6 +12,7 @@ if not conf.CheckHeader('termios.h'):
 
 for ex in examples:
 	env.Program(ex, LIBS=['mbb'])
+
 env['BUILDERS']['TestBuilder'] = Builder(action = 'tools/munt_main $SOURCE > $TARGET')
 
 tests = Glob('tests/*.c', True, False, True)
