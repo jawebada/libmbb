@@ -12,7 +12,7 @@ A test suite is a single C file containing any number of test cases. It must
 
 	#include "mbb/test.h"
 
-A test case looks like this
+A test case looks like this:
 
 	char *test_YOUR_NAME()
 	{
