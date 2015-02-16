@@ -41,13 +41,13 @@ void textcolor(int attr, int fg, int bg);
 
 int munt_tests_run;
 
-#define MUNT_RUN_TEST(test) do { \
+#define MUNT_RUN_TEST(TEST) do { \
 	char *message; \
-	fprintf(stderr, "### " #test " ###\n"); \
-	message = test(); \
+	fprintf(stderr, "### " #TEST " ###\n"); \
+	message = TEST(); \
 	munt_tests_run++; \
 	if (message) { \
-		MUNT_COLOR(fprintf(stderr, "### " #test " FAILED: '%s' ###\n\n", message)); \
+		MUNT_COLOR(fprintf(stderr, "### " #TEST " FAILED: '%s' ###\n\n", message)); \
 		return message; \
 	} else { \
 		fprintf(stderr, "### passed ###\n\n"); \
