@@ -40,3 +40,29 @@ generated main function to `test_suite_main.c`. This source code can be
 compiled to an executable which exits returning `EXIT_SUCCESS` or
 `EXIT_FAILURE` depending on whether the test suite failed.
 
+Running unit tests
+------------------
+
+The output of the automatically generated test program looks like this:
+
+	tests/test_queue
+	
+	Test suite 'test_queue':
+	
+	### test_enqueue_dequeue ###
+	Assertion passed (013): MQUE_IS_EMPTY(&queue)
+	Assertion passed (016): !MQUE_IS_FULL(&queue)
+	Assertion passed (016): !MQUE_IS_FULL(&queue)
+	Assertion passed (016): !MQUE_IS_FULL(&queue)
+	Assertion passed (016): !MQUE_IS_FULL(&queue)
+	Assertion passed (016): !MQUE_IS_FULL(&queue)
+	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (029): MQUE_IS_EMPTY(&queue)
+	### passed ###
+	
+	Test suite 'test_queue' passed (1 test run)
+
