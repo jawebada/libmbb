@@ -1,29 +1,30 @@
 #!/usr/bin/env ruby
 
-if ARGV.empty?
-	$stderr.puts "usage: #{File.basename($0)} test_suite.c..."
+if ARGV.length != 1
+	$stderr.puts "usage: #{File.basename($0)} test_suite.c"
 end
 
-ARGV.each do |file|
-	test_suite = File.basename(file).gsub('.c', '')
-	testh_included = false
-	tests = []
-	content = ""
-	File.readlines(file).each do |line|
-		if line =~ /^#include "mbb\/test\.h"/
-			testh_included = true
-		end
-		if line =~ /char \*(test_[^(]+)\(/
-			tests.push($1)
-		end
-		content += line
-	end
-	if not testh_included
-		$stderr.puts "#{file} does not include \"mbb/test.h\", skipping..."
-		next
-	end
+file = ARGV[0]
 
-	puts <<EOC
+test_suite = File.basename(file).gsub('.c', '')
+testh_included = false
+tests = []
+content = ""
+File.readlines(file).each do |line|
+	if line =~ /^#include "mbb\/test\.h"/
+		testh_included = true
+	end
+	if line =~ /char \*(test_[^(]+)\(/
+		tests.push($1)
+	end
+	content += line
+end
+if not testh_included
+	$stderr.puts "#{file} does not include \"mbb/test.h\", skipping..."
+	exit -1
+end
+
+puts <<EOC
 #{content}
 
 void textcolor(int attr, int fg, int bg)
@@ -60,4 +61,3 @@ int main(void)
 	return result != 0;
 }
 EOC
-end
