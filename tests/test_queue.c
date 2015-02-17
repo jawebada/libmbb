@@ -17,6 +17,8 @@ char *test_enqueue_dequeue()
 		MQUE_ENQUEUE(&queue, i);
 	}
 
+	MUNT_ASSERT(MQUE_IS_FULL(&queue));
+
 	for (i = 1; i <= 5; i++) {
 		int head;
 

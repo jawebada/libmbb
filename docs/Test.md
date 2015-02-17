@@ -31,6 +31,8 @@ A test case looks like this:
 			MQUE_ENQUEUE(&queue, i);
 		}
 	
+		MUNT_ASSERT(MQUE_IS_FULL(&queue));
+
 		for (i = 1; i <= 5; i++) {
 			int head;
 	
