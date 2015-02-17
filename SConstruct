@@ -1,17 +1,20 @@
 import os.path
 
-env = Environment(CPPPATH='.', LIBPATH='mbb')
-env.Library('mbb/mbb', Glob('mbb/*.c'))
-
-examples = Glob('examples/*.c', True, False, True)
-
+env = Environment(CPPPATH='.', LIBPATH='mbb', CCFLAGS="-Wall")
 conf = Configure(env)
-if not conf.CheckHeader('termios.h'):
-	examples.remove('examples/pelican.c')
-	examples.remove('examples/monostable.c')
 
-for ex in examples:
-	env.Program(ex, LIBS=['mbb'])
+libev_available = conf.CheckLibWithHeader('ev', 'ev.h', 'c')
+
+libmbb = Glob('mbb/*.c', True, False, True)
+if not libev_available: libmbb.remove('mbb/timer_ev.c')
+env.Library('mbb/mbb', libmbb)
+
+termiosh_available = conf.CheckHeader('termios.h')
+
+if termiosh_available:
+	env.Program('examples/pelican.c', LIBS=['mbb'])
+	if libev_available:
+		env.Program('examples/monostable.c', LIBS=['mbb', 'ev'])
 
 env['BUILDERS']['TestBuilder'] = Builder(action = 'tools/munt_main $SOURCE > $TARGET')
 
