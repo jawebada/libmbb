@@ -37,7 +37,7 @@ static int start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs
 	return 0;
 }
 
-int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event)
+int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, size_t nrof_timers)
 {
 	mtmr_prd_t *timers;
 	uint32_t i;
@@ -46,7 +46,7 @@ int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event)
 
 	timers = (mtmr_prd_t*) mhsm_context(hsm);
 
-	for (i = 0; i < MTMR_NROF_TIMERS(last_timer_event); i++) {
+	for (i = 0; i < nrof_timers; i++) {
 		mtmr_prd_t *timer = timers + i;
 
 		timer->active = 0;
@@ -59,16 +59,16 @@ int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event)
 	return 0;
 }
 
-int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32_t passed_msecs)
+int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, size_t nrof_timers, uint32_t passed_msecs)
 {
 	mtmr_prd_t *timers;
-	uint32_t i;
+	int i;
 
 	if (hsm == NULL) return -1;
 
 	timers = (mtmr_prd_t*) mhsm_context(hsm);
 
-	for (i = 0; i < MTMR_NROF_TIMERS(last_timer_event); i++) {
+	for (i = 0; i < nrof_timers; i++) {
 		mtmr_prd_t *timer = timers + i;
 
 		if (timer->active) {

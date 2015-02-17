@@ -31,7 +31,7 @@ typedef struct {
 	bool active;
 } mtmr_prd_t;
 
-int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event);
-int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32_t passed_msecs);
+int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, size_t nrof_timers);
+int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, size_t nrof_timers, uint32_t passed_msecs);
 
 #endif /* MBB_TIMER_PERIODIC_H */

@@ -46,12 +46,12 @@ static int start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs
 	return 0;
 }
 
-int mtmr_ev_initalise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, struct ev_loop *loop)
+int mtmr_ev_initalise_timers(mhsm_hsm_t *hsm, size_t nrof_timers, struct ev_loop *loop)
 {
 	mtmr_ev_t *timers = (mtmr_ev_t*) mhsm_context(hsm);
 	int i;
 
-	for (i = 0; i < MTMR_NROF_TIMERS(last_timer_event); i++) {
+	for (i = 0; i < nrof_timers; i++) {
 		mtmr_ev_t *timer = timers + i;
 		ev_timer *ev_timer = &timer->timer;
 

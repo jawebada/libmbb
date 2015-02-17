@@ -33,6 +33,6 @@ typedef struct {
 	uint32_t event_id;
 } mtmr_ev_t;
 
-int mtmr_ev_initalise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, struct ev_loop *loop);
+int mtmr_ev_initalise_timers(mhsm_hsm_t *hsm, size_t nrof_timers, struct ev_loop *loop);
 
 #endif /* MBB_TIMER_EV_H */

@@ -338,7 +338,7 @@ static int process(mhsm_hsm_t *pelican, void *state)
 		if (c == 'q') return -1;
 	}
 
-	mtmr_prd_increment_timers(pelican, PELICAN_EVENT_TIMEOUT_OFF_FLASH, PELICAN_PERIOD);
+	mtmr_prd_increment_timers(pelican, MTMR_NROF_TIMERS(PELICAN_EVENT_TIMEOUT_OFF_FLASH), PELICAN_PERIOD);
 
 	return 0;
 }
@@ -353,7 +353,7 @@ int main(void)
 	printf("press 'q' to quit\n");
 
 	mhsm_initialise(&pelican, &pelican_state, &operational);
-	if (mtmr_prd_initialise_timers(&pelican, PELICAN_EVENT_TIMEOUT_OFF_FLASH) != 0) {
+	if (mtmr_prd_initialise_timers(&pelican, MTMR_NROF_TIMERS(PELICAN_EVENT_TIMEOUT_OFF_FLASH)) != 0) {
 		MDBG_PRINT_LN("failed to initialise timers");
 		exit(EXIT_FAILURE);
 	}

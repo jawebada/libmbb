@@ -125,7 +125,7 @@ int main(void)
 		mono_state_t *switch_state = switch_states + i;
 
 		mhsm_initialise(switch_hsm, switch_state, &mono_off);
-		mtmr_ev_initalise_timers(switch_hsm, MONO_EVENT_TIMEOUT, loop);
+		mtmr_ev_initalise_timers(switch_hsm, MTMR_NROF_TIMERS(MONO_EVENT_TIMEOUT), loop);
 
 		switch_state->id = i + 1;
 		switch_state->counter = 0;
