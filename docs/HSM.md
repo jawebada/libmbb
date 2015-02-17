@@ -158,7 +158,10 @@ Non-blocking versus event-driven processing
 
 TBD
 
-Timers
-------
+Timer backends
+--------------
+
+* `mtmr_prd_t` for non-blocking real-time systems
+* `mtmr_ev_t` based on [libev](http://software.schmorp.de/pkg/libev.html)
 
 TBD
