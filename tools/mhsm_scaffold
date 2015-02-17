@@ -1,5 +1,22 @@
 #!/usr/bin/env ruby
 
+require 'optparse'
+
+options = {}
+options[:context_name] = "ctx"
+
+OptionParser.new do |opts|
+	opts.banner = "Usage: #{File.basename($0)} [options] <hsm_c_file>..."
+
+	opts.on("-t", "--context-type CONTEXT_TYPE", "Add CONTEXT_TYPE pointer to HSM context") do |type|
+		options[:context_type] = type
+	end
+
+	opts.on("-n", "--context-name CONTEXT_NAME", "Set the name of the HSM context pointer") do |name|
+		options[:context_name] = name
+	end
+end.parse!
+
 ARGV.each do |file|
 	if not File.exist?(file)
 		puts "file '#{file}' not found"
@@ -16,10 +33,18 @@ ARGV.each do |file|
 	end
 
 	open(file, 'a') do |f|
+		f.puts "\n"
 		for state in states do
 			f.puts <<EOC
 mhsm_state_t *#{state}_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
 {
+EOC
+			if t = options[:context_type]
+				n = options[:context_name]
+				f.puts "\t#{t} *#{n} = (#{t}*) mhsm_context(hsm);\n\n"
+			end
+
+			f.puts <<EOC
 	switch (event.id) {
 		case MHSM_EVENT_ENTRY:
 			break;
