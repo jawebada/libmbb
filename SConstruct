@@ -11,6 +11,13 @@ env.Library('mbb/mbb', libmbb)
 
 termiosh_available = conf.CheckHeader('termios.h')
 
+examples = Glob('examples/*.c', True, False, True)
+examples.remove('examples/pelican.c')
+examples.remove('examples/monostable.c')
+
+for example in examples:
+	env.Program(example, LIBS=['mbb'])
+
 if termiosh_available:
 	env.Program('examples/pelican.c', LIBS=['mbb'])
 	if libev_available:
