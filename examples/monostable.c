@@ -37,7 +37,7 @@ enum {
 
 typedef struct {
 	/* the state structure must start with an array of timers */
-	mtmr_ev_t timer[MTMR_NROF_TIMERS(MONO_EVENT_TRIGGER)];
+	mtmr_ev_t timer[MTMR_NROF_TIMERS(MONO_EVENT_TIMEOUT)];
 	int id;
 	int counter;
 } mono_state_t;
