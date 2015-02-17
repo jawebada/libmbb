@@ -38,7 +38,6 @@ static void nonblock(int state)
 	}
 
 	tcsetattr(STDIN_FILENO, TCSANOW, &ttystate);
-
 }
 
 static int kbhit()
