@@ -18,44 +18,44 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "timer.h"
+#include "timer_periodic.h"
 #include "types.h"
 #include "hsm.h"
 #include "debug.h"
 
-int mtmr_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event)
+int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event)
 {
-	mtmr_t *timers;
+	mtmr_prd_t *timers;
 	uint32_t i;
 
 	if (hsm == NULL) return -1;
 
-	timers = (mtmr_t*) mhsm_context(hsm);
+	timers = (mtmr_prd_t*) mhsm_context(hsm);
 
 	for (i = 0; i < MTMR_NROF_TIMERS(last_timer_event); i++) {
-		mtmr_t *timer = timers + i;
+		mtmr_prd_t *timer = timers + i;
 
 		timer->active = 0;
 		timer->period = 0;
 		timer->value = 0;
 	}
 
-	mhsm_set_timer_callback(hsm, mtmr_start_timer);
+	mhsm_set_timer_callback(hsm, mtmr_prd_start_timer);
 
 	return 0;
 }
 
-int mtmr_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32_t passed_msecs)
+int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32_t passed_msecs)
 {
-	mtmr_t *timers;
+	mtmr_prd_t *timers;
 	uint32_t i;
 
 	if (hsm == NULL) return -1;
 
-	timers = (mtmr_t*) mhsm_context(hsm);
+	timers = (mtmr_prd_t*) mhsm_context(hsm);
 
 	for (i = 0; i < MTMR_NROF_TIMERS(last_timer_event); i++) {
-		mtmr_t *timer = timers + i;
+		mtmr_prd_t *timer = timers + i;
 
 		if (timer->active) {
 			timer->value += passed_msecs;
@@ -69,9 +69,9 @@ int mtmr_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32_t p
 	return 0;
 }
 
-int mtmr_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs)
+int mtmr_prd_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs)
 {
-	mtmr_t *timers = (mtmr_t*) mhsm_context(hsm);
+	mtmr_prd_t *timers = (mtmr_prd_t*) mhsm_context(hsm);
 	uint32_t idx = event_id - MHSM_EVENT_CUSTOM;
 
 	MDBG_PRINT2("activating timer %d with period %d\n", idx, period_msecs);

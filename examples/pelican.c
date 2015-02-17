@@ -24,7 +24,7 @@
  */
 
 #include "mbb/hsm.h"
-#include "mbb/timer.h"
+#include "mbb/timer_periodic.h"
 #include "mbb/debug.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -77,12 +77,12 @@ MHSM_DEFINE_STATE(offline, NULL);
 typedef struct {
 	/* 
 	 * mtmr functions assume that mhsm_context(hsm) points to an array of
-	 * mtmr_t. So this array must be the first component of the state
+	 * mtmr_prd_t. So this array must be the first component of the state
 	 * structure. 
 	 * If the timeout events are defined first (see above)
 	 * MTMR_NROF_TIMERS(last_timer_event) gives the number of timers.
 	 */
-	mtmr_t timers[MTMR_NROF_TIMERS(PELICAN_EVENT_TIMEOUT_OFF_FLASH)];
+	mtmr_prd_t timers[MTMR_NROF_TIMERS(PELICAN_EVENT_TIMEOUT_OFF_FLASH)];
 	int cars_light_state;
 	int peds_light_state;
 	int peds_flash_counter;
@@ -338,7 +338,7 @@ static int process(mhsm_hsm_t *pelican, void *state)
 		if (c == 'q') return -1;
 	}
 
-	mtmr_increment_timers(pelican, PELICAN_EVENT_TIMEOUT_OFF_FLASH, PELICAN_PERIOD);
+	mtmr_prd_increment_timers(pelican, PELICAN_EVENT_TIMEOUT_OFF_FLASH, PELICAN_PERIOD);
 
 	return 0;
 }
@@ -353,7 +353,7 @@ int main(void)
 	printf("press 'q' to quit\n");
 
 	mhsm_initialise(&pelican, &pelican_state, &operational);
-	if (mtmr_initialise_timers(&pelican, PELICAN_EVENT_TIMEOUT_OFF_FLASH) != 0) {
+	if (mtmr_prd_initialise_timers(&pelican, PELICAN_EVENT_TIMEOUT_OFF_FLASH) != 0) {
 		MDBG_PRINT_LN("failed to initialise timers");
 		exit(EXIT_FAILURE);
 	}

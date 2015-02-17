@@ -18,8 +18,8 @@
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef MBB_TIMER_H
-#define MBB_TIMER_H
+#ifndef MBB_TIMER_PERIODIC_H
+#define MBB_TIMER_PERIODIC_H
 
 #include "types.h"
 #include "hsm.h"
@@ -29,11 +29,11 @@ typedef struct {
 	uint32_t period;
 	uint32_t value;
 	bool active;
-} mtmr_t;
+} mtmr_prd_t;
 
-int mtmr_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event);
-int mtmr_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32_t passed_msecs);
+int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event);
+int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32_t passed_msecs);
 
-int mtmr_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
+int mtmr_prd_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
 
-#endif /* MBB_TIMER_H */
+#endif /* MBB_TIMER_PERIODIC_H */
