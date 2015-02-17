@@ -14,7 +14,7 @@ Features
 
 * [Hierarchical state machines](docs/HSM.md)
 * [Fixed-cacpacity queues](docs/Queue.md)
-* [Debugging macros](docs/Debugging.md)
+* [Debugging macros](docs/Debug.md)
 * [Unit tests](docs/Test.md)
 
 Building
