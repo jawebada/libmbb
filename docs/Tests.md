@@ -49,7 +49,8 @@ A test case looks like this:
 
 The test case function must return a string and its name must begin with
 `test_`. It must return 0 if no error occured. The `MUNT_ASSERT(EXPRESSION)`
-macro makes the test case function return a string if `EXPRESSION` is false.
+macro is used for the actual test assertions. It makes the test case function
+return a string if `EXPRESSION` is false.
 
 Have a look at *libmbb*'s own [tests](../tests) as an example.
 
