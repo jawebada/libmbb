@@ -82,13 +82,18 @@ The output of the automatically generated test program looks like this:
 	Assertion passed (016): !MQUE_IS_FULL(&queue)
 	Assertion passed (016): !MQUE_IS_FULL(&queue)
 	Assertion passed (016): !MQUE_IS_FULL(&queue)
-	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
-	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
-	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
-	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
-	Assertion passed (023): !MQUE_IS_EMPTY(&queue)
-	Assertion passed (029): MQUE_IS_EMPTY(&queue)
+	Assertion passed (020): MQUE_IS_FULL(&queue)
+	Assertion passed (025): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (028): head == i
+	Assertion passed (025): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (028): head == i
+	Assertion passed (025): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (028): head == i
+	Assertion passed (025): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (028): head == i
+	Assertion passed (025): !MQUE_IS_EMPTY(&queue)
+	Assertion passed (028): head == i
+	Assertion passed (033): MQUE_IS_EMPTY(&queue)
 	### passed ###
 	
 	Test suite 'test_queue' passed (1 test run)
-
