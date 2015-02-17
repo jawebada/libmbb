@@ -34,6 +34,5 @@ typedef struct {
 } mtmr_ev_t;
 
 int mtmr_ev_initalise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, struct ev_loop *loop);
-int mtmr_ev_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
 
 #endif /* MBB_TIMER_EV_H */

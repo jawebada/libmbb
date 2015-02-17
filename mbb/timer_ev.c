@@ -30,7 +30,7 @@ static void timeout_cb(EV_P_ ev_timer *w, int revents)
 	mhsm_dispatch_event(timer->hsm, timer->event_id);
 }
 
-int mtmr_ev_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs)
+static int start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs)
 {
 	mtmr_ev_t *timers = (mtmr_ev_t*) mhsm_context(hsm);
 	uint32_t idx = event_id - MHSM_EVENT_CUSTOM;
@@ -62,7 +62,7 @@ int mtmr_ev_initalise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, struct 
 		ev_timer_init(ev_timer, timeout_cb, 0, 0);
 	}
 
-	mhsm_set_timer_callback(hsm, mtmr_ev_start_timer);
+	mhsm_set_timer_callback(hsm, start_timer);
 
 	return 0;
 }

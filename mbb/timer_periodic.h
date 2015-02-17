@@ -34,6 +34,4 @@ typedef struct {
 int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event);
 int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32_t passed_msecs);
 
-int mtmr_prd_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
-
 #endif /* MBB_TIMER_PERIODIC_H */

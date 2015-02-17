@@ -23,6 +23,20 @@
 #include "hsm.h"
 #include "debug.h"
 
+static int start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs)
+{
+	mtmr_prd_t *timers = (mtmr_prd_t*) mhsm_context(hsm);
+	uint32_t idx = event_id - MHSM_EVENT_CUSTOM;
+
+	MDBG_PRINT2("activating timer %d with period %d\n", idx, period_msecs);
+
+	timers[idx].period = period_msecs;
+	timers[idx].value = 0;
+	timers[idx].active = 1;
+
+	return 0;
+}
+
 int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event)
 {
 	mtmr_prd_t *timers;
@@ -40,7 +54,7 @@ int mtmr_prd_initialise_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event)
 		timer->value = 0;
 	}
 
-	mhsm_set_timer_callback(hsm, mtmr_prd_start_timer);
+	mhsm_set_timer_callback(hsm, start_timer);
 
 	return 0;
 }
@@ -65,20 +79,6 @@ int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, uint32_t last_timer_event, uint32
 			}
 		}
 	}
-
-	return 0;
-}
-
-int mtmr_prd_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs)
-{
-	mtmr_prd_t *timers = (mtmr_prd_t*) mhsm_context(hsm);
-	uint32_t idx = event_id - MHSM_EVENT_CUSTOM;
-
-	MDBG_PRINT2("activating timer %d with period %d\n", idx, period_msecs);
-
-	timers[idx].period = period_msecs;
-	timers[idx].value = 0;
-	timers[idx].active = 1;
 
 	return 0;
 }
