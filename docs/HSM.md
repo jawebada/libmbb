@@ -167,6 +167,18 @@ current state of the HSM a transition is triggered. If more than one of the
 active states trigger a transition the most inner state's transition is
 performed (UML's greedy transition selection).
 
+	__________________________________________________
+	|  LCA                                           |
+	| __________________     _______________________ |
+	| | STATE_A        |     | ___________________ | |
+	| |                |     | | STATE_B         | | |
+	| |                |     | |                 | | |
+	| |                |     | |                 | | |
+	| ------------------     | ------------------- | |
+	|                        ----------------------- |
+	--------------------------------------------------
+
+
 A transition from `STATE_A` to `STATE_B` consists of the following steps:
 
 * Find the least comon ancestor `LCA` of `STATE_A` and `STATE_B`
