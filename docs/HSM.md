@@ -236,7 +236,7 @@ An HSM's context is typically represented by an HSM-specific context structure:
 		...
 	} hsm_context_t;
 
-A pointer to such a state structure is given to the HSM during initialisation
+A pointer to such a context structure is given to the HSM during initialisation
 (see below) and can be retrieved by event processing functions using the
 function `mhsm_context`:
 
