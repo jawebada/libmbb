@@ -219,11 +219,13 @@ Use this feature with care as it can easily lead to infinite loops if abused.
 
 ### Defining States and Event Processing Functions
 
-	MHSM_DEFINE_STATE(STATE, PARENT);
+	MHSM_DEFINE_STATE(STATE, SUPERSTATE);
 
 The event processing function for `STATE` is called `STATE_fun` by convention.
 The macro `MHSM_DEFINE_STATE` is used to declare `STATE_fun`, define `STATE`,
-and assign `STATE_fun` and `PARENT` to `STATE`'s internal pointers.
+and assign `STATE_fun` and `SUPERSTATE` to `STATE`'s internal pointers.
+
+For states without a superstate `SUPERSTATE` must be `NULL`.
 
 After defining the state hierarchy using `MHSM_DEFINE_STATE` the tool
 `mhsm_scaffold` can be used to append event processing function stubs to the
