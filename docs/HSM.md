@@ -16,6 +16,7 @@ Features
 * Run-to-completion processing
 * Greedy transition selection
 * DO event
+* Timers with system-specific backends
 
 Synopsis
 --------
@@ -169,6 +170,20 @@ including `mbb/hsm.h`.
 Deferring an event also prevents any potential transitions triggered in super
 states.
 
+### Transitions Triggered by `MHSM_EVENT_ENTRY` and `MHSM_EVENT_EXIT` events
+
+To ensure run-to-completion processing `MHSM_EVENT_ENTRY` and `MHSM_EVENT_EXIT`
+events should usually not be allowed to trigger transitions. However,
+*libmbb*'s HSM module allows such transitions which may be useful under certain
+conditions.  
+
+For example, a `MHSM_EVENT_EXIT` event may trigger an action which is supposed
+to write some data to non-volatile memory. If this action fails it may be
+necessary to interrupt the current transition and trigger a transition to a
+fatal error state instead.
+
+Use this feature with care as it can easily lead to infinite loops if abused.
+
 ### Defining States and Event Processing Functions
 
 	MHSM_DEFINE_STATE(STATE, PARENT);
@@ -194,17 +209,35 @@ Since event processing functions can be called by multiple HSM instances they
 should not contain any static variables. If the application logic depends on
 extended state variables these should be part of the HSM's context.
 
-An HSM's context is typically represented by an HSM-specific state structure:
+An HSM's context is typically represented by an HSM-specific context structure:
 
 	typedef struct {
 		...
-	} state_t;
+	} hsm_context_t;
 
 A pointer to such a state structure is given to the HSM during initialisation
 (see below) and can be retrieved by event processing functions using the
 function `mhsm_context`:
 
 	void *mhsm_context(mhsm_hsm_t *hsm);
+
+The `mhsm_scaffold` tool adds a variable pointing to the context structure to
+the event processing function stubs if you add the `--context-type` option.
+
+The generated event processing function stub including a context pointer looks
+like this:
+
+	mhsm_state_t *STATE_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
+	{
+		hsm_context_t *ctx = (hsm_context_t*) mhsm_context(hsm);
+
+		switch (event.id) {
+			case MHSM_EVENT_ENTRY:
+				break;
+		}
+
+		return &STATE;
+	}
 
 ### Auxiliary Functions
 
@@ -266,15 +299,15 @@ composite states):
 Timers
 ------
 
-	void mhsm_set_timer_callback(int (*callback)(mhsm_hsm_t*, uint32_t, uint32_t));
 	int mhsm_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
+	void mhsm_set_timer_callback(int (*callback)(mhsm_hsm_t*, uint32_t, uint32_t));
 
 Timer backends
 
 * `mtmr_prd_t` for non-blocking real-time systems
 * `mtmr_ev_t` based on [libev](http://software.schmorp.de/pkg/libev.html)
 
-Non-blocking versus event-driven processing
+Non-Blocking versus Event-Driven Processing
 -------------------------------------------
 
 TBD
