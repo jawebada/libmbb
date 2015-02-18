@@ -290,8 +290,8 @@ After initialising the HSM events are dispatched using the functions
 	void mhsm_dispatch_event(mhsm_hsm_t *hsm, uint32_t id);
 	void mhsm_dispatch_event_arg(mhsm_hsm_t *hsm, uint32_t id, int32_t arg);
 
-To trigger the initial transition you must dispatch the `MHSM_EVENT_INITIAL`
-event:
+To trigger the initial transition after initialising an HSM you must dispatch
+the `MHSM_EVENT_INITIAL` event:
 
 	mhsm_dispatch_event(hsm, MHSM_EVENT_INITIAL);
 
