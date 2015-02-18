@@ -394,7 +394,7 @@ how much time has passed. This is usually done along with dispatching the
 	#include "mbb/timer_ev.h"
 
 [libev](http://software.schmorp.de/pkg/libev.html) is a full-featured and
-high-performance event loop featuring, amongst others, reative timers.
+high-performance event loop featuring, amongst others, relative timers.
 
 The timer structure is `mtmr_ev_t`. The array of timers must be initialised calling
 
