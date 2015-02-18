@@ -333,7 +333,7 @@ appropriate backend.
 
 All these backends rely on a convention: 
 
-The first element of the context structure of the hsm given to
+The first element of the context structure of the HSM given to
 `mhsm_start_timer` must be an array of timer structures, one structure per
 `event_id`. Additionally, they assume that custom *timer* events are defined
 first, i.e., the first timer event corresponds to `MHSM_EVENT_CUSTOM`. The
@@ -365,6 +365,8 @@ calling
 	mtmr_prd_initialise_timers(hsm, MTMR_NROF_TIMERS(MY_TIMER_EVENT_C));
 
 after the HSM has been intialised.
+
+	int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, size_t nrof_timers, uint32_t passed_msecs);
 
 The function `mtmr_prd_increment_timers` must be called periodically indicating
 how much time has passed. This is usually done along with dispatching the
