@@ -370,7 +370,7 @@ after the HSM has been intialised.
 
 The function `mtmr_prd_increment_timers` must be called periodically indicating
 how much time has passed. This is usually done along with dispatching the
-`MHSM_EVENT_DO`.
+`MHSM_EVENT_DO` event.
 
 [pelican](../examples/pelican.c) is an example using this timer backend.
 
