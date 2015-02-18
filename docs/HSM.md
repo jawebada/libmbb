@@ -15,6 +15,7 @@ Features
 * Composite states
 * Run-to-completion processing
 * Greedy transition selection
+* Deferred events
 * DO event
 * Timers with system-specific backends
 
@@ -50,10 +51,10 @@ Example
 	{
 		switch (event.id) {
 			case EVENT1:
-				printf("event1");
+				printf("event1\n");
 				break;
 			case EVENT2:
-				printf("event2");
+				printf("event2\n");
 				break;
 		}
 	
@@ -113,16 +114,34 @@ features an optional `int32_t` argument `arg`.
 
 There are five pre-defined event ids:
 
-* `MHSM_EVENT_ENTRY`
-* `MHSM_EVENT_INITIAL`
-* `MHSM_EVENT_DO`
-* `MHSM_EVENT_EXIT`
-* `MHSM_EVENT_CUSTOM`
+	enum {
+		MHSM_EVENT_ENTRY,
+		MHSM_EVENT_INITIAL,
+		MHSM_EVENT_DO,
+		MHSM_EVENT_EXIT,
+		MHSM_EVENT_CUSTOM
+	};
+
+`MHSM_EVENT_ENTRY`, `MHSM_EVENT_INITIAL`, and `MHSM_EVENT_EXIT` are dispatched
+automatically if event processing functions trigger a transition.
+
+The `MHSM_EVENT_DO` event is meant to be dispatched periodically in
+non-blocking real-time systems. This can be used to implement concurrency of
+multiple tasks if the underlying operating system lacks support for
+concurrency.
+
+Custom events should be defined as follows:
+
+	enum {
+		MY_EVENT_1 = MHSM_EVENT_CUSTOM,
+		MY_EVENT_2,
+		...
+	};
 
 Typical examples for event arguments include return codes, error codes, and
 indices. If an event is associated with an argument which cannot be represented
-by an `int32_t` value you will have to reserve space in HSM's context structure
-(see below).
+by an `int32_t` value you will have to reserve space in the HSM's context
+structure (see below).
 
 States and Event Processing Functions
 -------------------------------------
@@ -258,7 +277,7 @@ of deferred events.
 	void mhsm_initialise(mhsm_hsm_t *hsm, void *context, mhsm_state_t *initial_state);
 
 The function `mhsm_initialise` must be called to initialse an HSM. In addition
-to a pointer the HSM, it takes a pointer to HSM-specific context data and a
+to a pointer to the HSM, it takes a pointer to HSM-specific context data and a
 pointer to the HSM's initial state.
 
 ### Dispatching Events
@@ -299,15 +318,75 @@ composite states):
 Timers
 ------
 
+Since timers are of substantial importance in embedded computing *libmbb*'s HSM
+module features a simple yet powerful interface.
+
 	int mhsm_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
-	void mhsm_set_timer_callback(int (*callback)(mhsm_hsm_t*, uint32_t, uint32_t));
 
-Timer backends
+An event processing function may call `mhsm_start_timer` to ask its HSM to
+dispatch `event_id` after `period_msecs` ms have passed.
 
-* `mtmr_prd_t` for non-blocking real-time systems
-* `mtmr_ev_t` based on [libev](http://software.schmorp.de/pkg/libev.html)
+Of course, timers are highly system specific which is why you have to choose an
+appropriate backend. 
 
-Non-Blocking versus Event-Driven Processing
--------------------------------------------
+All these backends rely on a convention: The HSM's context structure of the hsm
+given to `mhsm_start_timer` must include an array of timer structures, one
+structure per `event_id`. Additionally, they assume that custom timer events
+are defined first, i.e., the first timer event corresponds to
+`MHSM_EVENT_CUSTOM`. The `MTMR_NROF_TIMERS` macro returns the number of timers
+given the last timer event id, provided the assumption is fulfilled.
 
-TBD
+### Example
+
+	enum {
+		MY_TIMER_EVENT_A = MHSM_EVENT_CUSTOM,
+		MY_TIMER_EVENT_B,
+		MY_TIMER_EVENT_C,
+		MY_OTHER_EVENT_A
+		...
+	};
+
+	typedef struct {
+		mtmr_prd_t timers[MTMR_NROF_TIMERS(MY_TIMER_EVENT_C)];
+		...
+	} hsm_context_t;
+
+### `mtmr_prd_t` for Non-Blocking Real-Time Systems
+
+	#include "mbb/timer_periodic.h"
+
+The timer structure is `mtmr_prd_t`. The array of timers must be initialised
+calling
+
+	mtmr_prd_initialise_timers(hsm, MTMR_NROF_TIMERS(MY_TIMER_EVENT_C));
+
+after the hsm has been intialised.
+
+The function `mtmr_prd_increment_timers` must be called periodically indicating
+how much time has passed. This is usually done along with dispatching the
+`MHSM_EVENT_DO`.
+
+[pelican](../examples/pelican.c) is an example using this timer backend.
+
+### `mtmr_ev_t` based on `libev`
+
+	#include "mbb/timer_ev.h"
+
+[libev](http://software.schmorp.de/pkg/libev.html) is a full-featured and
+high-performance event loop featuring, amongst others, reative timers.
+
+The timer structure is `mtmr_ev_t`. The array of timers must be initialised calling
+
+	mtmr_ev_initalise_timers(hsm, MTMR_NROF_TIMERS(MY_TIMER_EVENT_C), ev_loop);
+
+[monostable](../examples/monostable.c) is an example using this timer backend.
+
+### System-specific Timer Backends
+
+To implement a system-specific timer backend you will at least have to define a
+timer structure and an initialisation function which must call
+
+	void mhsm_set_timer_callback(int (*callback)(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs));
+
+The callback will be called whenever an event processing function calls
+`mhsm_start_timer`.
