@@ -138,6 +138,8 @@ Custom events should be defined as follows:
 		...
 	};
 
+### Event Arguments
+
 Typical examples for event arguments include return codes, error codes, and
 indices. If an event is associated with an argument which cannot be represented
 by an `int32_t` value you will have to reserve space in the HSM's context
@@ -155,7 +157,7 @@ superstate.
 	typedef mhsm_state_t *mhsm_event_processing_fun_t(mhsm_hsm_t *hsm, mhsm_event_t event);
 
 An event processing function takes a pointer to the HSM and an event and
-returns a pointer to the next state. The hsm pointer is needed to retrieve the
+returns a pointer to the next state. The HSM pointer is needed to retrieve the
 HSM's context and in case another event is to be dispatched. 
 
 ### State Transitions
@@ -163,7 +165,7 @@ HSM's context and in case another event is to be dispatched.
 If the pointer returned by the event processing function differs from the
 current state of the HSM a transition is triggered. If more than one of the
 active states trigger a transition the most inner state's transition is
-performed.
+performed (UML's greedy transition selection).
 
 A transition from `STATE_A` to `STATE_B` consists of the following steps:
 
@@ -329,12 +331,14 @@ dispatch `event_id` after `period_msecs` ms have passed.
 Of course, timers are highly system specific which is why you have to choose an
 appropriate backend. 
 
-All these backends rely on a convention: The HSM's context structure of the hsm
-given to `mhsm_start_timer` must include an array of timer structures, one
-structure per `event_id`. Additionally, they assume that custom timer events
-are defined first, i.e., the first timer event corresponds to
-`MHSM_EVENT_CUSTOM`. The `MTMR_NROF_TIMERS` macro returns the number of timers
-given the last timer event id, provided the assumption is fulfilled.
+All these backends rely on a convention: 
+
+The first element of the context structure of the hsm given to
+`mhsm_start_timer` must be an array of timer structures, one structure per
+`event_id`. Additionally, they assume that custom *timer* events are defined
+first, i.e., the first timer event corresponds to `MHSM_EVENT_CUSTOM`. The
+`MTMR_NROF_TIMERS` macro returns the number of timers given the last timer
+event id, provided the assumption is fulfilled.
 
 ### Example
 
@@ -360,7 +364,7 @@ calling
 
 	mtmr_prd_initialise_timers(hsm, MTMR_NROF_TIMERS(MY_TIMER_EVENT_C));
 
-after the hsm has been intialised.
+after the HSM has been intialised.
 
 The function `mtmr_prd_increment_timers` must be called periodically indicating
 how much time has passed. This is usually done along with dispatching the
@@ -379,14 +383,18 @@ The timer structure is `mtmr_ev_t`. The array of timers must be initialised call
 
 	mtmr_ev_initalise_timers(hsm, MTMR_NROF_TIMERS(MY_TIMER_EVENT_C), ev_loop);
 
+after the HSM has been initialised.
+
 [monostable](../examples/monostable.c) is an example using this timer backend.
 
 ### System-specific Timer Backends
 
-To implement a system-specific timer backend you will at least have to define a
-timer structure and an initialisation function which must call
+To implement a system-specific timer backend you will at least have to call
 
 	void mhsm_set_timer_callback(int (*callback)(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs));
 
-The callback will be called whenever an event processing function calls
-`mhsm_start_timer`.
+after the HSM has been intialised. The callback will be called whenever an
+event processing function calls `mhsm_start_timer`.
+
+The exisitng backends set this callback in their specific initialisation
+function.
