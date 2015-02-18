@@ -370,6 +370,14 @@ event id, provided the assumption is fulfilled.
 		...
 	} hsm_context_t;
 
+In this example the timers array contains three elements: `timers[0]`
+corresponds to `MY_TIMER_EVENT_A`, `timers[1]` to `MY_TIMER_EVENT_B` and
+`timers[2]` to `MY_TIMER_EVENT_C`.
+
+When an event processing function requests a timer the index of the timer
+structure is computed based on this convention. Using any of the existing timer
+backends without adhering to this convention will cause memory corruption.
+
 ### `mtmr_prd_t` for Non-Blocking Real-Time Systems
 
 	#include "mbb/timer_periodic.h"
