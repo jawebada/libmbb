@@ -5,6 +5,6 @@ if HAVE_LIBEV
 bin_PROGRAMS += monostable
 endif
 endif
-AM_CPPFLAGS = -I..
-LDADD = ../mbb/libmbb.a
+AM_CPPFLAGS = -I$(top_srcdir)
+LDADD = $(top_builddir)/mbb/libmbb.a
 monostable_LDADD = -lev $(LDADD)
