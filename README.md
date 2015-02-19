@@ -36,6 +36,8 @@ the `configure` script. After that it is the usual game of
 	make
 	make install
 
+Call `make check` to run the unit tests.
+
 Dependencies
 ------------
 

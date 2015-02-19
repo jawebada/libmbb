@@ -8,3 +8,4 @@ test_queue_SOURCES = test_queue_main.c
 AM_CPPFLAGS = -I..
 LDADD = ../mbb/libmbb.a
 MOSTLYCLEANFILES = test_hsm_main.c test_queue_main.c
+TESTS = $(noinst_PROGRAMS)
