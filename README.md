@@ -29,7 +29,7 @@ Building
 --------
 
 *libmbb* uses the autotools for building. To build the `configure` script you
-will need autoconf and automake installed. Running `autogen.sh` should build
+will need autoconf and automake installed. Running `./autogen.sh` should build
 the `configure` script. After that it is the usual game of
 
 	./configure
