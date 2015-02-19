@@ -23,5 +23,6 @@ AC_CONFIG_FILES([
 	mbb/Makefile
 	examples/Makefile
 	tests/Makefile
+	tools/Makefile
 ])
 AC_OUTPUT

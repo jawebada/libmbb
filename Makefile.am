@@ -1,4 +1,4 @@
-SUBDIRS = mbb examples 
+SUBDIRS = mbb examples tools
 if HAVE_RUBY
 SUBDIRS += tests
 endif
