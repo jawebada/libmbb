@@ -1,4 +1,4 @@
-AC_INIT([libmbb], [0.1], [jan.weil@web.de])
+AC_INIT(Embedded Building Bricks, 0.1, jan.weil@web.de, libmbb)
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
 AC_PROG_RANLIB
