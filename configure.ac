@@ -7,5 +7,6 @@ AM_CONDITIONAL([HAVE_LIBEV], [test x$have_ev = xtrue])
 AC_CONFIG_FILES([
 	Makefile
 	mbb/Makefile
+	examples/Makefile
 ])
 AC_OUTPUT
