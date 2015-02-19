@@ -27,15 +27,15 @@
  * * bool
  * * size_t
  *
- * If your system does not have <stdint.h>, <stdbool.h>, or <stddef.h>, you
+ * If your system does not have <inttypes.h>, <stdbool.h>, or <stddef.h>, you
  * should define MBB_SYSTEM_TYPES_HEADER before including mbb/types.h which is
  * included below and expected to provide the type definitions listed above.
  */
 
 #ifdef MBB_SYSTEM_TYPES_HEADER
 # include MBB_SYSTEM_TYPES_HEADER
-# else
-# include <stdint.h>
+#else
+# include <inttypes.h>
 # include <stdbool.h>
 # include <stddef.h>
 #endif
