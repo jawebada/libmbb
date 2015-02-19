@@ -67,6 +67,13 @@ Examples
   Example](http://www.state-machine.com/resources/AN_PELICAN.pdf), periodic
   timers
 
+Note that the terminal interfaces of some of the examples (`pelican` and
+`monostable`) will be interfered with by the `stderr` output of the debugging
+macros. You can either add `-DNDEBUG` to `CPPFLAGS` to disable these debugging
+macros or redirect `stderr` like this:
+
+	examples/pelican 2> log 
+
 License
 -------
 
