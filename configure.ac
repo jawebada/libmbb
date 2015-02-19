@@ -8,5 +8,6 @@ AC_CONFIG_FILES([
 	Makefile
 	mbb/Makefile
 	examples/Makefile
+	tests/Makefile
 ])
 AC_OUTPUT
