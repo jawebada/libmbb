@@ -3,6 +3,9 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
 AC_PROG_RANLIB
 AC_CHECK_PROG(have_ruby, ruby, yes, no)
+if test x$have_ruby != xyes; then
+	AC_MSG_WARN([Ruby was not found on your system, unit tests will not be compiled.])
+fi
 AC_CHECK_LIB(ev, ev_version_major, [have_ev=yes], [have_ev=no])
 AC_SYS_POSIX_TERMIOS
 AM_CONDITIONAL([HAVE_TERMIOSH], [test x$ac_cv_sys_posix_termios = xyes])
