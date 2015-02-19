@@ -36,6 +36,12 @@ the `configure` script. After that it is the usual game of
 	make
 	make install
 
+The `install` target will install the examples and unit tests along with libmbb
+itself. These programs have rather unspecific names like `test_hsm`. Calling
+`./configure --program-prefix=mbb_` will install them as `mbb_test_hsm`
+instead. Alternatively, you might specify `./configure --prefix=/opt/mbb` to
+install everything into `/opt/mbb`.
+
 Call `make check` to run the unit tests.
 
 Call `./configure --host=arm-linux` to cross-compile for arm-linux.

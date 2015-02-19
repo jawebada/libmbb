@@ -1,8 +1,8 @@
-noinst_PROGRAMS = debugging 
+bin_PROGRAMS = debugging 
 if HAVE_TERMIOSH
-noinst_PROGRAMS += pelican
+bin_PROGRAMS += pelican
 if HAVE_LIBEV
-noinst_PROGRAMS += monostable
+bin_PROGRAMS += monostable
 endif
 endif
 AM_CPPFLAGS = -I..
