@@ -1,4 +1,4 @@
-<img style="display: block; margin: auto;" src="img/mbb.png" alt"Logo libmbb"/>
+<img style="display: block; margin: auto;" src="docs/mbb.png" alt"Logo libmbb"/>
 
 libmbb - Embedded Building Bricks
 =================================
