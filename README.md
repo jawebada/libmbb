@@ -28,10 +28,13 @@ The tools sub directory contains the following command line tools:
 Building
 --------
 
-*libmbb* uses [scons](http://www.scons.org) for Building. Calling `scons` will
-build the library (`mbb/libmbb.a`) along with the example programs and tests.
+*libmbb* uses the autotools for Building. To build the `configure` script you
+will need autoconf and automake installed. Running `autogen.sh` should build
+the `configure` script. After that it is the usual game of
 
-Call `scons test` to run all unit tests.
+	./configure
+	make
+	make install
 
 Dependencies
 ------------
