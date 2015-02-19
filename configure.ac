@@ -4,6 +4,8 @@ AC_PROG_CC
 AC_PROG_RANLIB
 AC_CHECK_PROG(have_ruby, ruby, yes, no)
 AC_CHECK_LIB(ev, ev_version_major, [have_ev=yes], [have_ev=no])
+AC_SYS_POSIX_TERMIOS
+AM_CONDITIONAL([HAVE_TERMIOSH], [test x$ac_cv_sys_posix_termios = xyes])
 AM_CONDITIONAL([HAVE_LIBEV], [test x$have_ev = xyes])
 AM_CONDITIONAL([HAVE_RUBY], [test x$have_ruby = xyes])
 AC_CONFIG_FILES([
