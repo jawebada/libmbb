@@ -28,7 +28,7 @@ The tools sub directory contains the following command line tools:
 Building
 --------
 
-*libmbb* uses the autotools for Building. To build the `configure` script you
+*libmbb* uses the autotools for building. To build the `configure` script you
 will need autoconf and automake installed. Running `autogen.sh` should build
 the `configure` script. After that it is the usual game of
 
@@ -38,14 +38,18 @@ the `configure` script. After that it is the usual game of
 
 Call `make check` to run the unit tests.
 
+Call `./configure --host=arm-linux` to cross-compile for arm-linux.
+
+Call `./configure --help` for a general help message.
+
 Dependencies
 ------------
 
 * The [libev](http://software.schmorp.de/pkg/libev.html) timers backend and the
   examples using it are only compiled if `libev` and its header files are
-  installed on your system
+  installed on your system.
 * The tools are written in and thus depend on
-  [Ruby](https://www.ruby-lang.org/)
+  [Ruby](https://www.ruby-lang.org/).
 
 Examples
 --------
