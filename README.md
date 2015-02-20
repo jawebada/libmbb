@@ -14,10 +14,14 @@ The upstream repository is at <https://github.com/jawebada/libmbb/>.
 Features
 --------
 
-* [Hierarchical state machines](docs/HSM.md), including timers
+* [Hierarchical state machines (HSMs)](docs/HSM.md), including timers
 * [Fixed-cacpacity queues](docs/Queue.md)
 * [Debugging macros](docs/Debug.md)
 * [Unit tests](docs/Test.md)
+
+*libmbb* does not allocate memory dynamically. It is up to the developer to
+decide how memory is allocated. The HSM module supports both purely
+event-driven and non-blocking, real-time suitable processing.
 
 Tools
 -----
