@@ -36,7 +36,8 @@ Macros
 ------
 
 For the following macros `Q` refers to a pointer to a queue structure defined
-by `MQUE_DEFINE_STRUCT`.
+by `MQUE_DEFINE_STRUCT`. Note that these macros cannot be used on pointers
+passed to functions, the queue structure must be 'in scope'.
 
 	MQUE_DEFINE_STRUCT(TYPE, CAPACITY) [ = MQUE_INITIALISER];
 
