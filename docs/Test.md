@@ -60,7 +60,10 @@ Compiling unit tests
 --------------------
 
 The `munt_main` tool is used to generate a main function for a test suite,
-printing it to `stdout`. Calling `munt_main test_suite.c > test_suite_main.c`
+printing it to `stdout`. Calling 
+
+	munt_main test_suite.c > test_suite_main.c
+
 pipes the automatically generated main function to `test_suite_main.c`. 
 
 This source code can be compiled to an executable which exits returning
