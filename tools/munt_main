@@ -2,6 +2,7 @@
 
 if ARGV.length != 1
 	$stderr.puts "usage: #{File.basename($0)} test_suite.c"
+	exit 1
 end
 
 file = ARGV[0]
