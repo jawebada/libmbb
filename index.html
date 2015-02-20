@@ -35,11 +35,15 @@ systems.</p>
 <h2>Features</h2>
 
 <ul>
-<li><a href="docs/HSM.html">Hierarchical state machines</a>, including timers</li>
+<li><a href="docs/HSM.html">Hierarchical state machines (HSMs)</a>, including timers</li>
 <li><a href="docs/Queue.html">Fixed-cacpacity queues</a></li>
 <li><a href="docs/Debug.html">Debugging macros</a></li>
 <li><a href="docs/Test.html">Unit tests</a></li>
 </ul>
+
+<p><em>libmbb</em> does not allocate memory dynamically. It is up to the developer to
+decide how memory is allocated. The HSM module supports both purely
+event-driven and non-blocking, real-time suitable processing.</p>
 
 <h2>Tools</h2>
 

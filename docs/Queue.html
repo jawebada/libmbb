@@ -59,7 +59,8 @@ event: 2
 <h2>Macros</h2>
 
 <p>For the following macros <code>Q</code> refers to a pointer to a queue structure defined
-by <code>MQUE_DEFINE_STRUCT</code>.</p>
+by <code>MQUE_DEFINE_STRUCT</code>. Note that these macros cannot be used on pointers
+passed to functions, the queue structure must be &#39;in scope&#39;.</p>
 
 <pre><code>MQUE_DEFINE_STRUCT(TYPE, CAPACITY) [ = MQUE_INITIALISER];
 </code></pre>
