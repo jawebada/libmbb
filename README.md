@@ -6,8 +6,7 @@ libmbb - Embedded Building Bricks
 Synopsis
 --------
 
-*libmbb* is a C library assembling tools for the application development on
-embedded platforms.
+*libmbb* is a is a MIT-licensed C library targeted at embedded systems.
 
 Features
 --------
