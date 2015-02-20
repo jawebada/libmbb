@@ -346,7 +346,7 @@ dispatch `event_id` after `period_msecs` ms have passed.
 Of course, timers are highly system specific which is why you have to choose an
 appropriate backend. 
 
-All these backends rely on a convention: 
+*All these backends rely on a convention:*
 
 The first element of the context structure of the HSM given to
 `mhsm_start_timer` must be an array of timer structures, one structure per
