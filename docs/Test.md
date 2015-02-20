@@ -1,7 +1,7 @@
 libmbb - Unit Tests
 ===================
 
-*libmbb* features a simple unit test framework inspired by
+[*libmbb*](..) features a simple unit test framework inspired by
 [MinUnit](http://www.jera.com/techinfo/jtns/jtn002.html).
 
 Writing unit tests

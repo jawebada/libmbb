@@ -1,8 +1,8 @@
 libmbb - Fixed-capacity Queues
 ==============================
 
-*libmbb* features a simple set of macros to implement type-safe fixed-capacity
-queues.
+[*libmbb*](..) features a simple set of macros to implement type-safe
+fixed-capacity queues.
 
 The macros are defined in `mbb/queue.h`. 
 
