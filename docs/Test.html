@@ -82,8 +82,12 @@ return a string if <code>EXPRESSION</code> is false.</p>
 <h2>Compiling unit tests</h2>
 
 <p>The <code>munt_main</code> tool is used to generate a main function for a test suite,
-printing it to <code>stdout</code>. Calling <code>munt_main test_suite.c &gt; test_suite_main.c</code>
-pipes the automatically generated main function to <code>test_suite_main.c</code>. </p>
+printing it to <code>stdout</code>. Calling </p>
+
+<pre><code>munt_main test_suite.c &gt; test_suite_main.c
+</code></pre>
+
+<p>pipes the automatically generated main function to <code>test_suite_main.c</code>. </p>
 
 <p>This source code can be compiled to an executable which exits returning
 <code>EXIT_SUCCESS</code> or <code>EXIT_FAILURE</code> depending on whether the test suite failed.</p>
