@@ -6,7 +6,8 @@ libmbb - Embedded Building Bricks
 Synopsis
 --------
 
-*libmbb* is a is a MIT-licensed C library targeted at embedded systems.
+*libmbb* is a is a [MIT-licensed](LICENSE.txt) C library targeted at embedded
+systems.
 
 The upstream repository is at <https://github.com/jawebada/libmbb/>.
 
@@ -74,8 +75,3 @@ macros. You can either add `-DNDEBUG` to `CPPFLAGS` to disable these debugging
 macros or redirect `stderr` like this:
 
 	examples/pelican 2> log 
-
-License
--------
-
-*libmbb* is [MIT licensed](LICENSE.txt).
