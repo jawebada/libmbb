@@ -421,5 +421,5 @@ To implement a system-specific timer backend you will at least have to call
 after the HSM has been intialised. The callback will be called whenever an
 event processing function calls `mhsm_start_timer`.
 
-The exisitng backends set this callback in their specific initialisation
+The existing backends set this callback in their specific initialisation
 function.
