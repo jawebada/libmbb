@@ -1,8 +1,8 @@
 libmbb - Hierarchical State Machines
 ====================================
 
-*libmbb* features a lightweight module for hierarchical state machines (HSMs)
-modeled after the 
+[*libmbb*](..) features a lightweight module for hierarchical state machines
+(HSMs) modeled after the 
 [UML state machine](http://en.wikipedia.org/wiki/UML_state_machine).
 
 HSM types, macros, and functions prototypes are defined in `mbb/hsm.h`. 
