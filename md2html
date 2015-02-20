@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+def print_header(title, first_lines)
+	puts <<EOC
+<!DOCTYPE html>
+<html>
+<title>#{title}</title>
+
+<xmp theme="simplex" style="display:none;">
+
+#{first_lines.join("")}
+EOC
+end
+
+needs_header = true
+first_lines = []
+
+File.readlines(ARGV[0]).each do |line|
+	line.gsub!(/\[([^\]]+)\]\(([^)]+)\)/) do |match|
+		match.gsub!(/\.md/, ".html")
+		match
+	end
+	if needs_header 
+		if line =~ /^=+$/
+			first_lines << line
+			print_header(first_lines[-2], first_lines)
+			needs_header = false
+		else
+			first_lines << line
+		end
+	else
+		puts line
+	end
+end
+
+puts <<EOC
+<p style="text-align: center;">
+  <small>
+    Yes, this website is <a href="md2html">rendered automatically</a> from the
+    Markdown docs.
+  </small>
+</p>
+
+</xmp>
+<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+</html>
+EOC
