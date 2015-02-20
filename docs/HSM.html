@@ -1,441 +1,482 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>libmbb - Hierarchical State Machines
 </title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/cosmo/bootstrap.min.css">
+<style>
+body {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+@media (min-width: 768px) {
+	.container {
+		max-width: 730px;
+	}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>libmbb - Hierarchical State Machines</h1>
 
-<xmp theme="simplex" style="display:none;">
-
-libmbb - Hierarchical State Machines
-====================================
-
-
-*libmbb* features a lightweight module for hierarchical state machines (HSMs)
+<p><em>libmbb</em> features a lightweight module for hierarchical state machines (HSMs)
 modeled after the 
-[UML state machine](http://en.wikipedia.org/wiki/UML_state_machine).
+<a href="http://en.wikipedia.org/wiki/UML_state_machine">UML state machine</a>.</p>
 
-HSM types, macros, and functions prototypes are defined in `mbb/hsm.h`. 
+<p>HSM types, macros, and functions prototypes are defined in <code>mbb/hsm.h</code>. </p>
 
-	#include "mbb/hsm.h"
+<pre><code>#include &quot;mbb/hsm.h&quot;
+</code></pre>
 
-Features
---------
+<h2>Features</h2>
 
-* Composite states
-* Run-to-completion processing
-* Greedy transition selection
-* Deferred events
-* DO event
-* Timers with system-specific backends
+<ul>
+<li>Composite states</li>
+<li>Run-to-completion processing</li>
+<li>Greedy transition selection</li>
+<li>Deferred events</li>
+<li>DO event</li>
+<li>Timers with system-specific backends</li>
+</ul>
 
-Synopsis
---------
+<h2>Synopsis</h2>
 
-* Define custom events.
-* Define the state hierarchy of your HSM.
-* Optionally, use [`mhsm_scaffold`](../tools/mhsm_scaffold) to generate stubs
-  of the event processing functions.
-* Define the event processing functions.
-* Create as many instances of your HSM as you need along with their contexts.
-* Initialise your HSM instances and their contexts.
-* Dispatch the `MHSM_EVENT_INITIAL` event to trigger the initial transition.
-* Dispatch events as they occur.
+<ul>
+<li>Define custom events.</li>
+<li>Define the state hierarchy of your HSM.</li>
+<li>Optionally, use <a href="../tools/mhsm_scaffold"><code>mhsm_scaffold</code></a> to generate stubs
+of the event processing functions.</li>
+<li>Define the event processing functions.</li>
+<li>Create as many instances of your HSM as you need along with their contexts.</li>
+<li>Initialise your HSM instances and their contexts.</li>
+<li>Dispatch the <code>MHSM_EVENT_INITIAL</code> event to trigger the initial transition.</li>
+<li>Dispatch events as they occur.</li>
+</ul>
 
-Example
--------
+<h2>Example</h2>
 
-	#include "mbb/hsm.h"
-	#include <stdio.h>
-	
-	enum {
-		EVENT1 = MHSM_EVENT_CUSTOM,
-		EVENT2
-	}
-	
-	MHSM_DEFINE_STATE(top, NULL);
-	MHSM_DEFINE_STATE(a, &top);
-	MHSM_DEFINE_STATE(b, &top);
-	
-	mhsm_state_t *top_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
-	{
-		switch (event.id) {
-			case EVENT1:
-				printf("event1\n");
-				break;
-			case EVENT2:
-				printf("event2\n");
-				break;
-		}
-	
-		return &top;
-	}
-	
-	mhsm_state_t *a_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
-	{
-		switch (event.id) {
-			case EVENT1:
-				return &b;
-		}
-	
-		return &a;
-	}
-	
-	mhsm_state_t *b_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
-	{
-		switch (event.id) {
-			case EVENT1:
-				return &a;
-		}
-	
-		return &b;
-	}
-	
-	int main(void)
-	{
-		mhsm_hsm_t hsm;
-	
-		mhsm_initialise(&hsm, NULL, &a);
-		mhsm_dispatch_event(&hsm, MHSM_EVENT_INITIAL);
-		mhsm_dispatch_event(&hsm, EVENT1);
-		mhsm_dispatch_event(&hsm, EVENT1);
-		mhsm_dispatch_event(&hsm, EVENT2);
-	
-		return 0;
-	}
+<pre><code>#include &quot;mbb/hsm.h&quot;
+#include &lt;stdio.h&gt;
 
-* [monostable](../examples/monostable.c) is a simple example implementing
-  monostable multivibrators (as in staircase lightings).
-* [pelican](../examples/pelican.c) is an implementation of 
-[Miro Samek's](http://www.state-machine.com/)
-[PEdestrian LIght CONtrolled (PELICAN) Crossing
-Example](http://www.state-machine.com/resources/AN_PELICAN.pdf).
+enum {
+    EVENT1 = MHSM_EVENT_CUSTOM,
+    EVENT2
+}
 
-Events
-------
+MHSM_DEFINE_STATE(top, NULL);
+MHSM_DEFINE_STATE(a, &amp;top);
+MHSM_DEFINE_STATE(b, &amp;top);
 
-	typedef struct {
-		uint32_t id;
-		int32_t arg;
-	} mhsm_event_t;
+mhsm_state_t *top_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
+{
+    switch (event.id) {
+        case EVENT1:
+            printf(&quot;event1\n&quot;);
+            break;
+        case EVENT2:
+            printf(&quot;event2\n&quot;);
+            break;
+    }
 
-`mhsm_event_t` represents an event which is identified by its `uint32_t id` and
-features an optional `int32_t` argument `arg`.
+    return &amp;top;
+}
 
-There are five pre-defined event ids:
+mhsm_state_t *a_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
+{
+    switch (event.id) {
+        case EVENT1:
+            return &amp;b;
+    }
 
-	enum {
-		MHSM_EVENT_ENTRY,
-		MHSM_EVENT_INITIAL,
-		MHSM_EVENT_DO,
-		MHSM_EVENT_EXIT,
-		MHSM_EVENT_CUSTOM
-	};
+    return &amp;a;
+}
 
-`MHSM_EVENT_ENTRY`, `MHSM_EVENT_INITIAL`, and `MHSM_EVENT_EXIT` are dispatched
-automatically if event processing functions trigger a transition.
+mhsm_state_t *b_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
+{
+    switch (event.id) {
+        case EVENT1:
+            return &amp;a;
+    }
 
-The `MHSM_EVENT_DO` event is meant to be dispatched periodically in
+    return &amp;b;
+}
+
+int main(void)
+{
+    mhsm_hsm_t hsm;
+
+    mhsm_initialise(&amp;hsm, NULL, &amp;a);
+    mhsm_dispatch_event(&amp;hsm, MHSM_EVENT_INITIAL);
+    mhsm_dispatch_event(&amp;hsm, EVENT1);
+    mhsm_dispatch_event(&amp;hsm, EVENT1);
+    mhsm_dispatch_event(&amp;hsm, EVENT2);
+
+    return 0;
+}
+</code></pre>
+
+<ul>
+<li><a href="../examples/monostable.c">monostable</a> is a simple example implementing
+monostable multivibrators (as in staircase lightings).</li>
+<li><a href="../examples/pelican.c">pelican</a> is an implementation of 
+<a href="http://www.state-machine.com/">Miro Samek&#39;s</a>
+<a href="http://www.state-machine.com/resources/AN_PELICAN.pdf">PEdestrian LIght CONtrolled (PELICAN) Crossing
+Example</a>.</li>
+</ul>
+
+<h2>Events</h2>
+
+<pre><code>typedef struct {
+    uint32_t id;
+    int32_t arg;
+} mhsm_event_t;
+</code></pre>
+
+<p><code>mhsm_event_t</code> represents an event which is identified by its <code>uint32_t id</code> and
+features an optional <code>int32_t</code> argument <code>arg</code>.</p>
+
+<p>There are five pre-defined event ids:</p>
+
+<pre><code>enum {
+    MHSM_EVENT_ENTRY,
+    MHSM_EVENT_INITIAL,
+    MHSM_EVENT_DO,
+    MHSM_EVENT_EXIT,
+    MHSM_EVENT_CUSTOM
+};
+</code></pre>
+
+<p><code>MHSM_EVENT_ENTRY</code>, <code>MHSM_EVENT_INITIAL</code>, and <code>MHSM_EVENT_EXIT</code> are dispatched
+automatically if event processing functions trigger a transition.</p>
+
+<p>The <code>MHSM_EVENT_DO</code> event is meant to be dispatched periodically in
 non-blocking real-time systems. This can be used to implement concurrency of
 multiple tasks if the underlying operating system lacks support for
-concurrency.
+concurrency.</p>
 
-Custom events should be defined as follows:
+<p>Custom events should be defined as follows:</p>
 
-	enum {
-		MY_EVENT_1 = MHSM_EVENT_CUSTOM,
-		MY_EVENT_2,
-		...
-	};
+<pre><code>enum {
+    MY_EVENT_1 = MHSM_EVENT_CUSTOM,
+    MY_EVENT_2,
+    ...
+};
+</code></pre>
 
-### Event Arguments
+<h3>Event Arguments</h3>
 
-Typical examples for event arguments include return codes, error codes, and
+<p>Typical examples for event arguments include return codes, error codes, and
 indices. If an event is associated with an argument which cannot be represented
-by an `int32_t` value you will have to reserve space in the HSM's context
-structure (see below).
+by an <code>int32_t</code> value you will have to reserve space in the HSM&#39;s context
+structure (see below).</p>
 
-States and Event Processing Functions
--------------------------------------
+<h2>States and Event Processing Functions</h2>
 
-	typedef struct mhsm_state_s mhsm_state_t;
+<pre><code>typedef struct mhsm_state_s mhsm_state_t;
+</code></pre>
 
-`mhsm_state_t` is an anonymous structure representing an HSM state. It is
+<p><code>mhsm_state_t</code> is an anonymous structure representing an HSM state. It is
 basically a pointer to an event processing function along with a pointer to its
-superstate.
+superstate.</p>
 
-	typedef mhsm_state_t *mhsm_event_processing_fun_t(mhsm_hsm_t *hsm, mhsm_event_t event);
+<pre><code>typedef mhsm_state_t *mhsm_event_processing_fun_t(mhsm_hsm_t *hsm, mhsm_event_t event);
+</code></pre>
 
-An event processing function takes a pointer to the HSM and an event and
+<p>An event processing function takes a pointer to the HSM and an event and
 returns a pointer to the next state. The HSM pointer is needed to retrieve the
-HSM's context and in case another event is to be dispatched. 
+HSM&#39;s context and in case another event is to be dispatched. </p>
 
-### State Transitions
+<h3>State Transitions</h3>
 
-If the pointer returned by the event processing function differs from the
+<p>If the pointer returned by the event processing function differs from the
 current state of the HSM a transition is triggered. If more than one of the
-active states trigger a transition the most inner state's transition is
-performed (UML's greedy transition selection).
+active states trigger a transition the most inner state&#39;s transition is
+performed (UML&#39;s greedy transition selection).</p>
 
-	__________________________________________________
-	|  LCA                                           |
-	| __________________     _______________________ |
-	| | STATE_A        |     | ___________________ | |
-	| |                |     | | STATE_B         | | |
-	| |                |     | |                 | | |
-	| |                |     | |                 | | |
-	| ------------------     | ------------------- | |
-	|                        ----------------------- |
-	--------------------------------------------------
+<pre><code>__________________________________________________
+|  LCA                                           |
+| __________________     _______________________ |
+| | STATE_A        |     | ___________________ | |
+| |                |     | | STATE_B         | | |
+| |                |     | |                 | | |
+| |                |     | |                 | | |
+| ------------------     | ------------------- | |
+|                        ----------------------- |
+--------------------------------------------------
+</code></pre>
 
+<p>A transition from <code>STATE_A</code> to <code>STATE_B</code> consists of the following steps:</p>
 
-A transition from `STATE_A` to `STATE_B` consists of the following steps:
+<ul>
+<li>Find the least comon ancestor <code>LCA</code> of <code>STATE_A</code> and <code>STATE_B</code></li>
+<li>Dispatch <code>MHSM_EVENT_EXIT</code> events starting at <code>STATE_A</code> up to but not
+including <code>LCA</code></li>
+<li>Dispatch <code>MHSM_EVENT_ENTRY</code> events down to <code>STATE_B</code></li>
+<li>Dispatch the <code>MHSM_EVENT_INITIAL</code> event to <code>STATE_B</code></li>
+</ul>
 
-* Find the least comon ancestor `LCA` of `STATE_A` and `STATE_B`
-* Dispatch `MHSM_EVENT_EXIT` events starting at `STATE_A` up to but not
-  including `LCA`
-* Dispatch `MHSM_EVENT_ENTRY` events down to `STATE_B`
-* Dispatch the `MHSM_EVENT_INITIAL` event to `STATE_B`
+<p>A composite state&#39;s event processing function can catch the
+<code>MHSM_EVENT_INITIAL</code> event to trigger the initial transition to one of its
+substates.</p>
 
-A composite state's event processing function can catch the
-`MHSM_EVENT_INITIAL` event to trigger the initial transition to one of its
-substates.
+<h3>Deferring Events</h3>
 
-### Deferring Events
-
-If a state cannot process a certain event its event processing function can
-defer the event by returning `NULL`.  Deferred events are enqueued in an
-HSM-specific queue. This queue's capacity is `MHSM_EVENT_QUEUE_LENGTH`, which
+<p>If a state cannot process a certain event its event processing function can
+defer the event by returning <code>NULL</code>.  Deferred events are enqueued in an
+HSM-specific queue. This queue&#39;s capacity is <code>MHSM_EVENT_QUEUE_LENGTH</code>, which
 is 5 by default. Whether this is enough depends on the processing logic. If a
-longer queue is needed `MHSM_EVENT_QUEUE_LENGTH` can be pre-defined before
-including `mbb/hsm.h`.
+longer queue is needed <code>MHSM_EVENT_QUEUE_LENGTH</code> can be pre-defined before
+including <code>mbb/hsm.h</code>.</p>
 
-Deferring an event also prevents any potential transitions triggered in super
-states.
+<p>Deferring an event also prevents any potential transitions triggered in super
+states.</p>
 
-### Transitions Triggered by `MHSM_EVENT_ENTRY` and `MHSM_EVENT_EXIT` events
+<h3>Transitions Triggered by <code>MHSM_EVENT_ENTRY</code> and <code>MHSM_EVENT_EXIT</code> events</h3>
 
-To ensure run-to-completion processing `MHSM_EVENT_ENTRY` and `MHSM_EVENT_EXIT`
+<p>To ensure run-to-completion processing <code>MHSM_EVENT_ENTRY</code> and <code>MHSM_EVENT_EXIT</code>
 events should usually not be allowed to trigger transitions. However,
-*libmbb*'s HSM module allows such transitions which may be useful under certain
-conditions.  
+<em>libmbb</em>&#39;s HSM module allows such transitions which may be useful under certain
+conditions.  </p>
 
-For example, a `MHSM_EVENT_EXIT` event may trigger an action which is supposed
+<p>For example, a <code>MHSM_EVENT_EXIT</code> event may trigger an action which is supposed
 to write some data to non-volatile memory. If this action fails it may be
 necessary to interrupt the current transition and trigger a transition to a
-fatal error state instead.
+fatal error state instead.</p>
 
-Use this feature with care as it can easily lead to infinite loops if abused.
+<p>Use this feature with care as it can easily lead to infinite loops if abused.</p>
 
-### Defining States and Event Processing Functions
+<h3>Defining States and Event Processing Functions</h3>
 
-	MHSM_DEFINE_STATE(STATE, SUPERSTATE);
+<pre><code>MHSM_DEFINE_STATE(STATE, SUPERSTATE);
+</code></pre>
 
-The event processing function for `STATE` is called `STATE_fun` by convention.
-The macro `MHSM_DEFINE_STATE` is used to declare `STATE_fun`, define `STATE`,
-and assign `STATE_fun` and `SUPERSTATE` to `STATE`'s internal pointers.
+<p>The event processing function for <code>STATE</code> is called <code>STATE_fun</code> by convention.
+The macro <code>MHSM_DEFINE_STATE</code> is used to declare <code>STATE_fun</code>, define <code>STATE</code>,
+and assign <code>STATE_fun</code> and <code>SUPERSTATE</code> to <code>STATE</code>&#39;s internal pointers.</p>
 
-`SUPERSTATE` is a pointer to `STATE`'s superstate. For states without a
-superstate `SUPERSTATE` must be `NULL`.
+<p><code>SUPERSTATE</code> is a pointer to <code>STATE</code>&#39;s superstate. For states without a
+superstate <code>SUPERSTATE</code> must be <code>NULL</code>.</p>
 
-After defining the state hierarchy using `MHSM_DEFINE_STATE` the tool
-`mhsm_scaffold` can be used to append event processing function stubs to the
-source file:
+<p>After defining the state hierarchy using <code>MHSM_DEFINE_STATE</code> the tool
+<code>mhsm_scaffold</code> can be used to append event processing function stubs to the
+source file:</p>
 
-	tools/mhsm_scaffold myhsm.c
+<pre><code>tools/mhsm_scaffold myhsm.c
+</code></pre>
 
-The tool is rather primitive. It records all appearances of the
-`MHSM_DEFINE_STATE` macro and appends an event processing function stub for
+<p>The tool is rather primitive. It records all appearances of the
+<code>MHSM_DEFINE_STATE</code> macro and appends an event processing function stub for
 each of the states to the end of the file, regardless of any other existing
-source code.
+source code.</p>
 
-### Extended State Variables
+<h3>Extended State Variables</h3>
 
-Since event processing functions can be called by multiple HSM instances they
+<p>Since event processing functions can be called by multiple HSM instances they
 should not contain any static variables. If the application logic depends on
-extended state variables these should be part of the HSM's context.
+extended state variables these should be part of the HSM&#39;s context.</p>
 
-An HSM's context is typically represented by an HSM-specific context structure:
+<p>An HSM&#39;s context is typically represented by an HSM-specific context structure:</p>
 
-	typedef struct {
-		...
-	} hsm_context_t;
+<pre><code>typedef struct {
+    ...
+} hsm_context_t;
+</code></pre>
 
-A pointer to such a context structure is given to the HSM during initialisation
+<p>A pointer to such a context structure is given to the HSM during initialisation
 (see below) and can be retrieved by event processing functions using the
-function `mhsm_context`:
+function <code>mhsm_context</code>:</p>
 
-	void *mhsm_context(mhsm_hsm_t *hsm);
+<pre><code>void *mhsm_context(mhsm_hsm_t *hsm);
+</code></pre>
 
-The `mhsm_scaffold` tool adds a variable pointing to the context structure to
-the event processing function stubs if you add the `--context-type` option.
+<p>The <code>mhsm_scaffold</code> tool adds a variable pointing to the context structure to
+the event processing function stubs if you add the <code>--context-type</code> option.</p>
 
-The generated event processing function stub including a context pointer looks
-like this:
+<p>The generated event processing function stub including a context pointer looks
+like this:</p>
 
-	mhsm_state_t *STATE_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
-	{
-		hsm_context_t *ctx = (hsm_context_t*) mhsm_context(hsm);
+<pre><code>mhsm_state_t *STATE_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
+{
+    hsm_context_t *ctx = (hsm_context_t*) mhsm_context(hsm);
 
-		switch (event.id) {
-			case MHSM_EVENT_ENTRY:
-				break;
-		}
+    switch (event.id) {
+        case MHSM_EVENT_ENTRY:
+            break;
+    }
 
-		return &STATE;
-	}
+    return &amp;STATE;
+}
+</code></pre>
 
-### Auxiliary Functions
+<h3>Auxiliary Functions</h3>
 
-The function `mhsm_is_ancestor` returns true if `ancestor` is an ancestor of
-`target`:
+<p>The function <code>mhsm_is_ancestor</code> returns true if <code>ancestor</code> is an ancestor of
+<code>target</code>:</p>
 
-	bool mhsm_is_ancestor(mhsm_state_t *ancestor, mhsm_state_t *target);
+<pre><code>bool mhsm_is_ancestor(mhsm_state_t *ancestor, mhsm_state_t *target);
+</code></pre>
 
-HSMs
-----
+<h2>HSMs</h2>
 
-	typedef struct mhsm_hsm_s mhsm_hsm_t;
+<pre><code>typedef struct mhsm_hsm_s mhsm_hsm_t;
+</code></pre>
 
-`mhsm_hsm_t` is an anonymous structure representing an HSM. It stores the
-pointer of the HSM's current state, a pointer the HSM's context, and the queue
-of deferred events.
+<p><code>mhsm_hsm_t</code> is an anonymous structure representing an HSM. It stores the
+pointer of the HSM&#39;s current state, a pointer the HSM&#39;s context, and the queue
+of deferred events.</p>
 
-	void mhsm_initialise(mhsm_hsm_t *hsm, void *context, mhsm_state_t *initial_state);
+<pre><code>void mhsm_initialise(mhsm_hsm_t *hsm, void *context, mhsm_state_t *initial_state);
+</code></pre>
 
-The function `mhsm_initialise` must be called to initialse an HSM. In addition
+<p>The function <code>mhsm_initialise</code> must be called to initialse an HSM. In addition
 to a pointer to the HSM, it takes a pointer to HSM-specific context data and a
-pointer to the HSM's initial state.
+pointer to the HSM&#39;s initial state.</p>
 
-### Dispatching Events
+<h3>Dispatching Events</h3>
 
-After initialising the HSM events are dispatched using the functions
-`mhsm_dispatch_event` and `mhsm_dispatch_event_arg`:
+<p>After initialising the HSM events are dispatched using the functions
+<code>mhsm_dispatch_event</code> and <code>mhsm_dispatch_event_arg</code>:</p>
 
-	void mhsm_dispatch_event(mhsm_hsm_t *hsm, uint32_t id);
-	void mhsm_dispatch_event_arg(mhsm_hsm_t *hsm, uint32_t id, int32_t arg);
+<pre><code>void mhsm_dispatch_event(mhsm_hsm_t *hsm, uint32_t id);
+void mhsm_dispatch_event_arg(mhsm_hsm_t *hsm, uint32_t id, int32_t arg);
+</code></pre>
 
-To trigger the initial transition after initialising an HSM you must dispatch
-the `MHSM_EVENT_INITIAL` event:
+<p>To trigger the initial transition after initialising an HSM you must dispatch
+the <code>MHSM_EVENT_INITIAL</code> event:</p>
 
-	mhsm_dispatch_event(hsm, MHSM_EVENT_INITIAL);
+<pre><code>mhsm_dispatch_event(hsm, MHSM_EVENT_INITIAL);
+</code></pre>
 
-### Recursive Calls of Dispatch Functions and Enqueued Events
+<h3>Recursive Calls of Dispatch Functions and Enqueued Events</h3>
 
-The dispatch functions may be called from within an event processing function.
-To assure run-to-completion processing the event is enqueued in the HSM's
+<p>The dispatch functions may be called from within an event processing function.
+To assure run-to-completion processing the event is enqueued in the HSM&#39;s
 internal queue in this case and dispatched after the processing function has
-returned.
+returned.</p>
 
-Each call of one of the dispatch functions will also dispatch all enqueued
-events once after dispatching the given event.
+<p>Each call of one of the dispatch functions will also dispatch all enqueued
+events once after dispatching the given event.</p>
 
-### Auxiliary Functions
+<h3>Auxiliary Functions</h3>
 
-A pointer to the HSM's most inner active state can be retrieved using the
-`mhsm_current_state` function:
+<p>A pointer to the HSM&#39;s most inner active state can be retrieved using the
+<code>mhsm_current_state</code> function:</p>
 
-	mhsm_state_t *mhsm_current_state(mhsm_hsm_t *hsm);
+<pre><code>mhsm_state_t *mhsm_current_state(mhsm_hsm_t *hsm);
+</code></pre>
 
-The function `mhsm_is_in` returns true if `state` is an active state (including
-composite states):
+<p>The function <code>mhsm_is_in</code> returns true if <code>state</code> is an active state (including
+composite states):</p>
 
-	bool mhsm_is_in(mhsm_hsm_t *hsm, mhsm_state_t *state);
+<pre><code>bool mhsm_is_in(mhsm_hsm_t *hsm, mhsm_state_t *state);
+</code></pre>
 
-Timers
-------
+<h2>Timers</h2>
 
-Since timers are of substantial importance in embedded computing *libmbb*'s HSM
-module features a simple yet powerful interface.
+<p>Since timers are of substantial importance in embedded computing <em>libmbb</em>&#39;s HSM
+module features a simple yet powerful interface.</p>
 
-	int mhsm_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
+<pre><code>int mhsm_start_timer(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs);
+</code></pre>
 
-An event processing function may call `mhsm_start_timer` to ask its HSM to
-dispatch `event_id` after `period_msecs` ms have passed.
+<p>An event processing function may call <code>mhsm_start_timer</code> to ask its HSM to
+dispatch <code>event_id</code> after <code>period_msecs</code> ms have passed.</p>
 
-Of course, timers are highly system specific which is why you have to choose an
-appropriate backend. 
+<p>Of course, timers are highly system specific which is why you have to choose an
+appropriate backend. </p>
 
-All these backends rely on a convention: 
+<p>All these backends rely on a convention: </p>
 
-The first element of the context structure of the HSM given to
-`mhsm_start_timer` must be an array of timer structures, one structure per
-`event_id`. Additionally, they assume that custom *timer* events are defined
-first, i.e., the first timer event corresponds to `MHSM_EVENT_CUSTOM`. The
-`MTMR_NROF_TIMERS` macro returns the number of timers given the last timer
-event id, provided the assumption is fulfilled.
+<p>The first element of the context structure of the HSM given to
+<code>mhsm_start_timer</code> must be an array of timer structures, one structure per
+<code>event_id</code>. Additionally, they assume that custom <em>timer</em> events are defined
+first, i.e., the first timer event corresponds to <code>MHSM_EVENT_CUSTOM</code>. The
+<code>MTMR_NROF_TIMERS</code> macro returns the number of timers given the last timer
+event id, provided the assumption is fulfilled.</p>
 
-### Example
+<h3>Example</h3>
 
-	enum {
-		MY_TIMER_EVENT_A = MHSM_EVENT_CUSTOM,
-		MY_TIMER_EVENT_B,
-		MY_TIMER_EVENT_C,
-		MY_OTHER_EVENT_A
-		...
-	};
+<pre><code>enum {
+    MY_TIMER_EVENT_A = MHSM_EVENT_CUSTOM,
+    MY_TIMER_EVENT_B,
+    MY_TIMER_EVENT_C,
+    MY_OTHER_EVENT_A
+    ...
+};
 
-	typedef struct {
-		mtmr_prd_t timers[MTMR_NROF_TIMERS(MY_TIMER_EVENT_C)];
-		...
-	} hsm_context_t;
+typedef struct {
+    mtmr_prd_t timers[MTMR_NROF_TIMERS(MY_TIMER_EVENT_C)];
+    ...
+} hsm_context_t;
+</code></pre>
 
-In this example the timers array contains three elements: `timers[0]`
-corresponds to `MY_TIMER_EVENT_A`, `timers[1]` to `MY_TIMER_EVENT_B` and
-`timers[2]` to `MY_TIMER_EVENT_C`.
+<p>In this example the timers array contains three elements: <code>timers[0]</code>
+corresponds to <code>MY_TIMER_EVENT_A</code>, <code>timers[1]</code> to <code>MY_TIMER_EVENT_B</code> and
+<code>timers[2]</code> to <code>MY_TIMER_EVENT_C</code>.</p>
 
-When an event processing function requests a timer the index of the timer
+<p>When an event processing function requests a timer the index of the timer
 structure is computed based on this convention. Using any of the existing timer
-backends without adhering to this convention will cause memory corruption.
+backends without adhering to this convention will cause memory corruption.</p>
 
-### `mtmr_prd_t` for Non-Blocking Real-Time Systems
+<h3><code>mtmr_prd_t</code> for Non-Blocking Real-Time Systems</h3>
 
-	#include "mbb/timer_periodic.h"
+<pre><code>#include &quot;mbb/timer_periodic.h&quot;
+</code></pre>
 
-The timer structure is `mtmr_prd_t`. The array of timers must be initialised
-calling
+<p>The timer structure is <code>mtmr_prd_t</code>. The array of timers must be initialised
+calling</p>
 
-	mtmr_prd_initialise_timers(hsm, MTMR_NROF_TIMERS(MY_TIMER_EVENT_C));
+<pre><code>mtmr_prd_initialise_timers(hsm, MTMR_NROF_TIMERS(MY_TIMER_EVENT_C));
+</code></pre>
 
-after the HSM has been intialised.
+<p>after the HSM has been intialised.</p>
 
-	int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, size_t nrof_timers, uint32_t passed_msecs);
+<pre><code>int mtmr_prd_increment_timers(mhsm_hsm_t *hsm, size_t nrof_timers, uint32_t passed_msecs);
+</code></pre>
 
-The function `mtmr_prd_increment_timers` must be called periodically indicating
+<p>The function <code>mtmr_prd_increment_timers</code> must be called periodically indicating
 how much time has passed. This is usually done along with dispatching the
-`MHSM_EVENT_DO` event.
+<code>MHSM_EVENT_DO</code> event.</p>
 
-[pelican](../examples/pelican.c) is an example using this timer backend.
+<p><a href="../examples/pelican.c">pelican</a> is an example using this timer backend.</p>
 
-### `mtmr_ev_t` based on `libev`
+<h3><code>mtmr_ev_t</code> based on <code>libev</code></h3>
 
-	#include "mbb/timer_ev.h"
+<pre><code>#include &quot;mbb/timer_ev.h&quot;
+</code></pre>
 
-[libev](http://software.schmorp.de/pkg/libev.html) is a full-featured and
-high-performance event loop featuring, amongst others, relative timers.
+<p><a href="http://software.schmorp.de/pkg/libev.html">libev</a> is a full-featured and
+high-performance event loop featuring, amongst others, relative timers.</p>
 
-The timer structure is `mtmr_ev_t`. The array of timers must be initialised calling
+<p>The timer structure is <code>mtmr_ev_t</code>. The array of timers must be initialised calling</p>
 
-	mtmr_ev_initalise_timers(hsm, MTMR_NROF_TIMERS(MY_TIMER_EVENT_C), ev_loop);
+<pre><code>mtmr_ev_initalise_timers(hsm, MTMR_NROF_TIMERS(MY_TIMER_EVENT_C), ev_loop);
+</code></pre>
 
-after the HSM has been initialised.
+<p>after the HSM has been initialised.</p>
 
-[monostable](../examples/monostable.c) is an example using this timer backend.
+<p><a href="../examples/monostable.c">monostable</a> is an example using this timer backend.</p>
 
-### System-specific Timer Backends
+<h3>System-specific Timer Backends</h3>
 
-To implement a system-specific timer backend you will at least have to call
+<p>To implement a system-specific timer backend you will at least have to call</p>
 
-	void mhsm_set_timer_callback(int (*callback)(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs));
+<pre><code>void mhsm_set_timer_callback(int (*callback)(mhsm_hsm_t *hsm, uint32_t event_id, uint32_t period_msecs));
+</code></pre>
 
-after the HSM has been intialised. The callback will be called whenever an
-event processing function calls `mhsm_start_timer`.
+<p>after the HSM has been intialised. The callback will be called whenever an
+event processing function calls <code>mhsm_start_timer</code>.</p>
 
-The exisitng backends set this callback in their specific initialisation
-function.
-<p style="text-align: center;"><small>
-This website is <a href="md2html">rendered automatically</a> from the Markdown
-documentation.
-</small></p>
+<p>The exisitng backends set this callback in their specific initialisation
+function.</p>
 
-</xmp>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+<p class="text-muted text-center" style="margin-top: 40px;">
+This website was rendered <a href="md2html">automatically</a> from <em>libmbb</em>'s Markdown documentation.
+</p>
+</div>
+</body>
 </html>

@@ -1,138 +1,155 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>libmbb - Debugging Macros
 </title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/cosmo/bootstrap.min.css">
+<style>
+body {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+@media (min-width: 768px) {
+	.container {
+		max-width: 730px;
+	}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>libmbb - Debugging Macros</h1>
 
-<xmp theme="simplex" style="display:none;">
+<p><em>libmbb</em> features a set of debugging macros defined in <code>mbb/debug.h</code>.</p>
 
-libmbb - Debugging Macros
-=========================
+<pre><code>#include &quot;mbb/debug.h&quot;
+</code></pre>
 
+<p>All debugging macros can be disabled by defining the macro NDEBUG before including
+<code>mbb/debug.h</code>.</p>
 
-*libmbb* features a set of debugging macros defined in `mbb/debug.h`.
+<p>Have a look at <a href="../examples/debugging.c">the example</a>.</p>
 
-	#include "mbb/debug.h"
+<h2>Print a string adding a newline</h2>
 
-All debugging macros can be disabled by defining the macro NDEBUG before including
-`mbb/debug.h`.
+<pre><code>MDBG_PRINT_LN(&quot;hello, world!&quot;);
+</code></pre>
 
-Have a look at [the example](../examples/debugging.c).
+<p><code>2015-02-12T12:36:41.000 (examples/debugging.c, 11): hello, world!</code></p>
 
-Print a string adding a newline
--------------------------------
+<h2>Print an integer (decimal)</h2>
 
-	MDBG_PRINT_LN("hello, world!");
+<pre><code>int i = 128;
+MDBG_PRINT_I(i);
+</code></pre>
 
-`2015-02-12T12:36:41.000 (examples/debugging.c, 11): hello, world!`
+<p><code>2015-02-12T12:36:41.000 (examples/debugging.c, 13): i = 128</code></p>
 
-Print an integer (decimal)
---------------------------
+<h2>Print an integer (octal)</h2>
 
-	int i = 128;
-	MDBG_PRINT_I(i);
+<pre><code>int i = 128;
+MDBG_PRINT_O(i);
+</code></pre>
 
-`2015-02-12T12:36:41.000 (examples/debugging.c, 13): i = 128`
+<p><code>2015-02-12T12:36:41.000 (examples/debugging.c, 14): i = O200</code></p>
 
-Print an integer (octal)
---------------------------
+<h2>Print an integer (hexadecimal)</h2>
 
-	int i = 128;
-	MDBG_PRINT_O(i);
+<pre><code>int i = 128;
+MDBG_PRINT_X(i);
+</code></pre>
 
-`2015-02-12T12:36:41.000 (examples/debugging.c, 14): i = O200`
+<p><code>2015-02-12T12:36:41.000 (examples/debugging.c, 15): i = 0x80</code></p>
 
-Print an integer (hexadecimal)
---------------------------
+<h2>Print a character</h2>
 
-	int i = 128;
-	MDBG_PRINT_X(i);
+<pre><code>char a = &#39;b&#39;;
+MDBG_PRINT_C(a);
+</code></pre>
 
-`2015-02-12T12:36:41.000 (examples/debugging.c, 15): i = 0x80`
+<p><code>2015-02-12T12:36:41.000 (examples/debugging.c, 17): a = &#39;b&#39;</code></p>
 
-Print a character
------------------
+<h2>Print a float value</h2>
 
-	char a = 'b';
-	MDBG_PRINT_C(a);
+<pre><code>double pi = 3.14;
+MDBG_PRINT_F(pi);
+</code></pre>
 
-`2015-02-12T12:36:41.000 (examples/debugging.c, 17): a = 'b'`
+<p><code>2015-02-12T12:36:41.000 (examples/debugging.c, 19): pi = 3.140000</code></p>
 
-Print a float value
--------------------
+<h2>Print a string</h2>
 
-	double pi = 3.14;
-	MDBG_PRINT_F(pi);
+<pre><code>char foo[] = &quot;bar&quot;;
+MDBG_PRINT_S(foo);
+</code></pre>
 
-`2015-02-12T12:36:41.000 (examples/debugging.c, 19): pi = 3.140000`
+<p><code>2015-02-12T12:44:06.000 (examples/debugging.c, 23): foo: &quot;bar&quot;</code></p>
 
-Print a string
---------------
+<h2>Print a memory region</h2>
 
-	char foo[] = "bar";
-	MDBG_PRINT_S(foo);
+<pre><code>uint8_t data[] = { 0xa, 0xb, 0xc, 0xd, 0xe, 0xf };
+MDBG_PRINT_MEM(data, sizeof(data));
+</code></pre>
 
-`2015-02-12T12:44:06.000 (examples/debugging.c, 23): foo: "bar"`
+<p><code>2015-02-12T12:36:41.000 (examples/debugging.c, 21): data(0xbf916bd9, 6): 0A 0B 0C 0D 0E 0F</code></p>
 
-Print a memory region
----------------------
+<h2>Generic printing macros</h2>
 
-	uint8_t data[] = { 0xa, 0xb, 0xc, 0xd, 0xe, 0xf };
-	MDBG_PRINT_MEM(data, sizeof(data));
+<p>There are generic <code>printf</code>-like macros depending on the number of arguments.
+This is because only few preprocessors feature support for variadic macros.</p>
 
-`2015-02-12T12:36:41.000 (examples/debugging.c, 21): data(0xbf916bd9, 6): 0A 0B 0C 0D 0E 0F `
+<pre><code>MDBG_PRINT0(FORMAT)
+MDBG_PRINT1(FORMAT, ARG)
+MDBG_PRINT2(FORMAT, ARG1, ARG2)
+...
+MDBG_PRINT10(FORMAT, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6, ARG7, ARG8, ARG9, ARG10)
+</code></pre>
 
-Generic printing macros
------------------------
+<p>Example:</p>
 
-There are generic `printf`-like macros depending on the number of arguments.
-This is because only few preprocessors feature support for variadic macros.
+<pre><code>int answer = 42;
+MDBG_PRINT1(&quot;the answer is %d\n&quot;, answer);
+</code></pre>
 
-	MDBG_PRINT0(FORMAT)
-	MDBG_PRINT1(FORMAT, ARG)
-	MDBG_PRINT2(FORMAT, ARG1, ARG2)
-	...
-	MDBG_PRINT10(FORMAT, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6, ARG7, ARG8, ARG9, ARG10)
+<p><code>2015-02-12T12:44:06.000 (examples/debugging.c, 27): the answer is 42</code></p>
 
-Example:
+<h2>Print errno</h2>
 
-	int answer = 42;
-	MDBG_PRINT1("the answer is %d\n", answer);
+<pre><code>read(55, NULL, 0);
+MDBG_PRINT_ERRNO(&quot;read&quot;);
+</code></pre>
 
-`2015-02-12T12:44:06.000 (examples/debugging.c, 27): the answer is 42`
+<p><code>2015-02-12T13:13:41.000 (examples/debugging.c, 52): read: Bad file descriptor</code></p>
 
-Print errno
------------
+<h2>Assertions</h2>
 
-	read(55, NULL, 0);
-	MDBG_PRINT_ERRNO("read");
+<pre><code>int answer = 42;
+MDBG_ASSERT(answer == 41);
+</code></pre>
 
-`2015-02-12T13:13:41.000 (examples/debugging.c, 52): read: Bad file descriptor`
+<p><code>2015-02-12T13:10:33.000 (examples/debugging.c, 54): assertion failed: answer == 41</code></p>
 
-Assertions
-----------
+<pre><code>debugging: examples/debugging.c:54: main: Assertion `answer == 41&#39; failed.
+Aborted
+</code></pre>
 
-	int answer = 42;
-	MDBG_ASSERT(answer == 41);
+<h2>Assert a line of code is never reached</h2>
 
-`2015-02-12T13:10:33.000 (examples/debugging.c, 54): assertion failed: answer == 41`
+<pre><code>MDBG_NEVER_REACHED();
+</code></pre>
 
-	debugging: examples/debugging.c:54: main: Assertion `answer == 41' failed.
-	Aborted
+<p><code>2015-02-12T13:13:41.000 (examples/debugging.c, 56): assertion failed: !&quot;reached&quot;</code></p>
 
-Assert a line of code is never reached
---------------------------------------
+<pre><code>debugging: examples/debugging.c:56: main: Assertion `!&quot;reached&quot;&#39; failed.
+Aborted
+</code></pre>
 
-	MDBG_NEVER_REACHED();
-
-`2015-02-12T13:13:41.000 (examples/debugging.c, 56): assertion failed: !"reached"`
-
-	debugging: examples/debugging.c:56: main: Assertion `!"reached"' failed.
-	Aborted
-<p style="text-align: center;"><small>
-This website is <a href="md2html">rendered automatically</a> from the Markdown
-documentation.
-</small></p>
-
-</xmp>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+<p class="text-muted text-center" style="margin-top: 40px;">
+This website was rendered <a href="md2html">automatically</a> from <em>libmbb</em>'s Markdown documentation.
+</p>
+</div>
+</body>
 </html>

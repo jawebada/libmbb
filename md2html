@@ -1,45 +1,57 @@
 #!/usr/bin/env ruby
 
-def print_header(title, first_lines)
-	puts <<EOC
-<!DOCTYPE html>
-<html>
-<title>#{title}</title>
+require 'github/markdown'
 
-<xmp theme="simplex" style="display:none;">
-
-#{first_lines.join("")}
-EOC
-end
-
-needs_header = true
-first_lines = []
+contents = []
+title = false
+last_line = ""
 
 File.readlines(ARGV[0]).each do |line|
+	if not title 
+		if line =~ /^=+$/
+			title = last_line
+		else
+			last_line = line
+		end
+	end
 	line.gsub!(/\[([^\]]+)\]\(([^)]+)\)/) do |match|
 		match.gsub!(/\.md/, ".html")
 		match
 	end
-	if needs_header 
-		if line =~ /^=+$/
-			first_lines << line
-			print_header(first_lines[-2], first_lines)
-			needs_header = false
-		else
-			first_lines << line
-		end
-	else
-		puts line
-	end
+	contents << line
 end
 
-puts <<EOC
-<p style="text-align: center;"><small>
-This website is <a href="md2html">rendered automatically</a> from the Markdown
-documentation.
-</small></p>
+contents = contents.join("")
 
-</xmp>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+puts <<EOC
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>#{title}</title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/cosmo/bootstrap.min.css">
+<style>
+body {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+@media (min-width: 768px) {
+	.container {
+		max-width: 730px;
+	}
+}
+</style>
+</head>
+<body>
+<div class="container">
+#{GitHub::Markdown.render(contents)}
+<p class="text-muted text-center" style="margin-top: 40px;">
+This website was rendered <a href="md2html">automatically</a> from <em>libmbb</em>'s Markdown documentation.
+</p>
+</div>
+</body>
 </html>
 EOC
+

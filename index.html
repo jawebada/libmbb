@@ -1,93 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>libmbb - Embedded Building Bricks
 </title>
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/cosmo/bootstrap.min.css">
+<style>
+body {
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+@media (min-width: 768px) {
+	.container {
+		max-width: 730px;
+	}
+}
+</style>
+</head>
+<body>
+<div class="container">
+<p><img style="display: block; margin: auto;" src="docs/mbb.png" alt"Logo libmbb"/></p>
 
-<xmp theme="simplex" style="display:none;">
+<h1>libmbb - Embedded Building Bricks</h1>
 
-<img style="display: block; margin: auto;" src="docs/mbb.png" alt"Logo libmbb"/>
+<h2>Synopsis</h2>
 
-libmbb - Embedded Building Bricks
-=================================
+<p><em>libmbb</em> is a is a <a href="LICENSE.txt">MIT-licensed</a> C library targeted at embedded
+systems.</p>
 
+<p>The upstream repository is at <a href="https://github.com/jawebada/libmbb/">https://github.com/jawebada/libmbb/</a>.</p>
 
-Synopsis
---------
+<h2>Features</h2>
 
-*libmbb* is a is a [MIT-licensed](LICENSE.txt) C library targeted at embedded
-systems.
+<ul>
+<li><a href="docs/HSM.html">Hierarchical state machines</a>, including timers</li>
+<li><a href="docs/Queue.html">Fixed-cacpacity queues</a></li>
+<li><a href="docs/Debug.html">Debugging macros</a></li>
+<li><a href="docs/Test.html">Unit tests</a></li>
+</ul>
 
-The upstream repository is at <https://github.com/jawebada/libmbb/>.
+<h2>Tools</h2>
 
-Features
---------
+<p>The tools sub directory contains the following command line tools:</p>
 
-* [Hierarchical state machines](docs/HSM.html), including timers
-* [Fixed-cacpacity queues](docs/Queue.html)
-* [Debugging macros](docs/Debug.html)
-* [Unit tests](docs/Test.html)
+<ul>
+<li><code>mhsm_scaffold</code> adds event processing function stubs to source files</li>
+<li><code>munt_main</code> generates main functions for unit tests</li>
+</ul>
 
-Tools
------
+<h2>Building</h2>
 
-The tools sub directory contains the following command line tools:
+<p><em>libmbb</em> uses the autotools for building. To build the <code>configure</code> script you
+will need autoconf and automake installed. Running <code>./autogen.sh</code> should build
+the <code>configure</code> script. After that it is the usual game of</p>
 
-* `mhsm_scaffold` adds event processing function stubs to source files
-* `munt_main` generates main functions for unit tests
+<pre><code>./configure
+make
+make install
+</code></pre>
 
-Building
---------
+<p>The <code>install</code> target will install the examples and unit tests along with libmbb
+itself. These programs have rather unspecific names like <code>test_hsm</code>. Calling
+<code>./configure --program-prefix=mbb_</code> will install them as <code>mbb_test_hsm</code>
+instead. Alternatively, you might specify <code>./configure --prefix=/opt/mbb</code> to
+install everything into <code>/opt/mbb</code>.</p>
 
-*libmbb* uses the autotools for building. To build the `configure` script you
-will need autoconf and automake installed. Running `./autogen.sh` should build
-the `configure` script. After that it is the usual game of
+<p>Call <code>make check</code> to run the unit tests.</p>
 
-	./configure
-	make
-	make install
+<p>Call <code>./configure --host=arm-linux</code> to cross-compile for arm-linux.</p>
 
-The `install` target will install the examples and unit tests along with libmbb
-itself. These programs have rather unspecific names like `test_hsm`. Calling
-`./configure --program-prefix=mbb_` will install them as `mbb_test_hsm`
-instead. Alternatively, you might specify `./configure --prefix=/opt/mbb` to
-install everything into `/opt/mbb`.
+<p>Call <code>./configure --help</code> for a general help message.</p>
 
-Call `make check` to run the unit tests.
+<h2>Dependencies</h2>
 
-Call `./configure --host=arm-linux` to cross-compile for arm-linux.
+<ul>
+<li>The <a href="http://software.schmorp.de/pkg/libev.html">libev</a> timers backend and the
+examples using it are only compiled if <code>libev</code> and its header files are
+installed on your system.</li>
+<li>The tools are written in and thus depend on
+<a href="https://www.ruby-lang.org/">Ruby</a>.</li>
+</ul>
 
-Call `./configure --help` for a general help message.
+<h2>Examples</h2>
 
-Dependencies
-------------
+<ul>
+<li><a href="examples/debugging.c">debugging</a>: debugging macros</li>
+<li><a href="examples/monostable.c">monostable</a>: multiple HSM instances, libev timers</li>
+<li><a href="examples/pelican.c">pelican</a>: <a href="http://www.state-machine.com/">Miro Samek&#39;s</a>
+<a href="http://www.state-machine.com/resources/AN_PELICAN.pdf">PEdestrian LIght CONtrolled (PELICAN) Crossing
+Example</a>, periodic
+timers</li>
+</ul>
 
-* The [libev](http://software.schmorp.de/pkg/libev.html) timers backend and the
-  examples using it are only compiled if `libev` and its header files are
-  installed on your system.
-* The tools are written in and thus depend on
-  [Ruby](https://www.ruby-lang.org/).
+<p>Note that the terminal interfaces of some of the examples (<code>pelican</code> and
+<code>monostable</code>) will be interfered with by the <code>stderr</code> output of the debugging
+macros. You can either add <code>-DNDEBUG</code> to <code>CPPFLAGS</code> to disable these debugging
+macros or redirect <code>stderr</code> like this:</p>
 
-Examples
---------
+<pre><code>examples/pelican 2&gt; log 
+</code></pre>
 
-* [debugging](examples/debugging.c): debugging macros
-* [monostable](examples/monostable.c): multiple HSM instances, libev timers
-* [pelican](examples/pelican.c): [Miro Samek's](http://www.state-machine.com/)
-  [PEdestrian LIght CONtrolled (PELICAN) Crossing
-  Example](http://www.state-machine.com/resources/AN_PELICAN.pdf), periodic
-  timers
-
-Note that the terminal interfaces of some of the examples (`pelican` and
-`monostable`) will be interfered with by the `stderr` output of the debugging
-macros. You can either add `-DNDEBUG` to `CPPFLAGS` to disable these debugging
-macros or redirect `stderr` like this:
-
-	examples/pelican 2> log 
-<p style="text-align: center;"><small>
-This website is <a href="md2html">rendered automatically</a> from the Markdown
-documentation.
-</small></p>
-
-</xmp>
-<script src="http://strapdownjs.com/v/0.2/strapdown.js"></script>
+<p class="text-muted text-center" style="margin-top: 40px;">
+This website was rendered <a href="md2html">automatically</a> from <em>libmbb</em>'s Markdown documentation.
+</p>
+</div>
+</body>
 </html>
