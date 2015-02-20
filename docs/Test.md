@@ -54,7 +54,7 @@ The test case function must return a string and its name must begin with
 macro is used for the actual test assertions. It makes the test case function
 return a string if `EXPRESSION` is false.
 
-Have a look at *libmbb*'s own [tests](../tests) as an example.
+Have a look at *libmbb*'s own [tests](../tests/) as an example.
 
 Compiling unit tests
 --------------------
