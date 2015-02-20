@@ -1,7 +1,7 @@
 libmbb - Debugging Macros
 =========================
 
-*libmbb* features a set of debugging macros defined in `mbb/debug.h`.
+[*libmbb*](..) features a set of debugging macros defined in `mbb/debug.h`.
 
 	#include "mbb/debug.h"
 
