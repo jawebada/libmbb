@@ -23,53 +23,6 @@
 #include "mbb/debug.h"
 #include "mbb/queue.h"
 
-MHSM_DEFINE_STATE(test_it_a, NULL);
-MHSM_DEFINE_STATE(test_it_a1, &test_it_a);
-MHSM_DEFINE_STATE(test_it_a11, &test_it_a1);
-
-mhsm_state_t *test_it_a_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
-{
-	switch (event.id) {
-		case MHSM_EVENT_INITIAL:
-			return &test_it_a1;
-	}
-
-	return &test_it_a;
-}
-
-mhsm_state_t *test_it_a1_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
-{
-	switch (event.id) {
-		case MHSM_EVENT_INITIAL:
-			return &test_it_a11;
-	}
-
-	return &test_it_a1;
-}
-
-mhsm_state_t *test_it_a11_fun(mhsm_hsm_t *hsm, mhsm_event_t event)
-{
-	switch (event.id) {
-		case MHSM_EVENT_ENTRY:
-			MDBG_PRINT_LN("a11 entry");
-			break;
-	}
-
-	return &test_it_a11;
-}
-
-char *test_initial_transition()
-{
-	mhsm_hsm_t hsm;
-
-	mhsm_initialise(&hsm, NULL, &test_it_a);
-	mhsm_dispatch_event(&hsm, MHSM_EVENT_INITIAL);
-
-	MUNT_ASSERT(mhsm_current_state(&hsm) == &test_it_a11);
-
-	return 0;
-}
-
 typedef struct {
 	mhsm_state_t *state;
 	uint32_t event_id;
@@ -181,6 +134,9 @@ char *test_transition_events()
 
 	mhsm_initialise(&hsm, NULL, &test_te_a);
 	mhsm_dispatch_event(&hsm, MHSM_EVENT_INITIAL);
+
+	MUNT_ASSERT(mhsm_current_state(&hsm) == &test_te_a1);
+
 	mhsm_dispatch_event(&hsm, TEST_TE_EVENT_TRIGGER);
 
 	MUNT_ASSERT(MQUE_LENGTH(&expected_event_queue) == MQUE_LENGTH(&test_event_queue));
