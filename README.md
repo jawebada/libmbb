@@ -6,7 +6,7 @@ libmbb - Embedded Building Bricks
 Synopsis
 --------
 
-*libmbb* is a is a [MIT-licensed](LICENSE.txt) C library targeted at embedded
+*libmbb* is a [MIT-licensed](LICENSE.txt) C library targeted at embedded
 systems.
 
 The upstream repository is at <https://github.com/jawebada/libmbb/>.
