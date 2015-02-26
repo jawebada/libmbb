@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>libmbb - Embedded Building Bricks
 </title>
-<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/cosmo/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.2/cosmo/bootstrap.min.css">
 <style>
 body {
 	padding-top: 20px;
@@ -56,9 +56,10 @@ event-driven and non-blocking, real-time suitable processing.</p>
 
 <h2>Building</h2>
 
-<p><em>libmbb</em> uses the autotools for building. To build the <code>configure</code> script you
-will need autoconf and automake installed. Running <code>./autogen.sh</code> should build
-the <code>configure</code> script. After that it is the usual game of</p>
+<p><em>libmbb</em> uses the autotools for building. If you clone its upstream repository
+you will have to call <code>./autogen.sh</code> to build the <code>configure</code> script.
+<code>autogen.sh</code> just calls <code>autoreconf</code> which depends on <code>autoconf</code> and <code>automake</code>
+being installed. If the <code>configure</code> script is built it is the usual game of</p>
 
 <pre><code>./configure
 make
