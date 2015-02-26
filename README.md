@@ -34,9 +34,10 @@ The tools sub directory contains the following command line tools:
 Building
 --------
 
-*libmbb* uses the autotools for building. To build the `configure` script you
-will need autoconf and automake installed. Running `./autogen.sh` should build
-the `configure` script. After that it is the usual game of
+*libmbb* uses the autotools for building. If you clone its upstream repository
+you will have to call `./autogen.sh` to build the `configure` script.
+`autogen.sh` just calls `autoreconf` which depends on `autoconf` and `automake`
+being installed. If the `configure` script is built it is the usual game of
 
 	./configure
 	make
