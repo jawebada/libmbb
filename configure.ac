@@ -1,6 +1,7 @@
 AC_INIT(Embedded Building Bricks, 0.1, jan.weil@web.de, libmbb)
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AC_PROG_CC
+AM_PROG_AR
 AC_PROG_RANLIB
 AC_CHECK_PROG(have_ruby, ruby, yes, no)
 if test x$have_ruby != xyes; then
