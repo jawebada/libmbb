@@ -25,9 +25,12 @@
 int mdbg_printf(const char *format, ...)
 {
 	va_list ap;
+	int ret;
 
 	va_start(ap, format);
-	return vfprintf(stderr, format, ap);
+	ret = vfprintf(stderr, format, ap);
+	va_end(ap);
+	return ret;
 }
 
 int mdbg_timestamp(char *out, int size)
