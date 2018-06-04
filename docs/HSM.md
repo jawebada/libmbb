@@ -41,7 +41,7 @@ Example
 	enum {
 		EVENT1 = MHSM_EVENT_CUSTOM,
 		EVENT2
-	}
+	};
 	
 	MHSM_DEFINE_STATE(top, NULL);
 	MHSM_DEFINE_STATE(a, &top);

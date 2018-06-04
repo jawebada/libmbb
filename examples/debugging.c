@@ -30,6 +30,7 @@ int main(void)
 	char foo[] = "bar";
 	uint8_t data[] = { 0xa, 0xb, 0xc, 0xd, 0xe, 0xf };
 	int answer = 42;
+	ssize_t ret;
 
 	MDBG_PRINT_LN("hello, world!");
 
@@ -48,11 +49,13 @@ int main(void)
 	MDBG_PRINT1("the answer is %d\n", answer);
 
 	/* expected to fail */
-	read(55, NULL, 0);
+	ret = read(55, NULL, 0);
+	MDBG_ASSERT(ret == -1);
 	MDBG_PRINT_ERRNO("read");
 
 	MDBG_ASSERT(answer == 42);
 
+	/* this will abort the program */
 	MDBG_NEVER_REACHED();
 
 	return 0;
